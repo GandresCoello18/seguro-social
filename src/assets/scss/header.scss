@@ -69,12 +69,18 @@
         }
       }
     }
-    .logo img {
-      @media #{$mobile_device} {
-        max-width: 160px;
-      }
-      @media #{$tablet_device} {
-        max-width: 160px;
+    .logo {
+      background-color: #fff;
+      margin-top: 10px;
+      margin-left: -10px;
+      border-radius: 14px;
+      img {
+        @media #{$mobile_device} {
+          max-width: 160px;
+        }
+        @media #{$tablet_device} {
+          max-width: 160px;
+        }
       }
     }
     .Appointment {

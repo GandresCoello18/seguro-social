@@ -1,6 +1,7 @@
 import React from "react";
 import { Head } from "../header/head";
 import { Link } from "react-router-dom";
+import { ModalInicioSession } from "../header/btn-modal-inicio-session";
 
 interface Props {
   title: string;
@@ -43,7 +44,7 @@ export function NavBar({ title }: Props) {
                   <div className="col-xl-3 col-lg-3 d-none d-lg-block">
                     <div className="Appointment">
                       <div className="d-none d-lg-block">
-                        <button className="boxed-btn3">Iniciar Session</button>
+                        <ModalInicioSession />
                       </div>
                     </div>
                   </div>

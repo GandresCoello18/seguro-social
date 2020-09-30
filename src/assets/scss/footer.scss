@@ -38,6 +38,11 @@
         color: #ffffff;
         text-transform: capitalize;
         margin-bottom: 40px;
+        a {
+          img {
+            width: 260px;
+          }
+        }
         @media #{$mobile_device} {
           margin-bottom: 20px;
         }
