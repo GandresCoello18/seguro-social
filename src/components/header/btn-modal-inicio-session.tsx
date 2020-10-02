@@ -41,7 +41,7 @@ export function ModalInicioSession() {
           Crear cuenta...!
         </ModalHeader>
         <ModalBody>
-          <RegistroForm />
+          <RegistroForm setVisibleRegitro={setVisibleRegitro} />
         </ModalBody>
         <ModalFooter>
           <Button color="danger" onClick={() => setVisibleRegitro(false)}>

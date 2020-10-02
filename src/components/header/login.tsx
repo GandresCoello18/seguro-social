@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { AccessLogin } from "../../api/fetch/login";
+import { useHistory } from "react-router-dom";
+import { ResponseAxios } from "../../interface";
+import { SpinnerLoader } from "../../components/loader/spinner";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  FormFeedback,
+  Alert,
+} from "reactstrap";
 
 interface Login {
   email: string;
@@ -8,10 +20,27 @@ interface Login {
 }
 
 export function LoginForm() {
-  const { control, handleSubmit } = useForm<Login>();
+  const { control, handleSubmit, errors } = useForm<Login>();
+  const history = useHistory<typeof useHistory>();
+  const [feedback, setFeedback] = useState<string>("");
+  const [isFeeedback, setIsFeedback] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const send = (data: Login) => {
-    console.log(data);
+  const send = async (data: Login) => {
+    setIsFeedback("");
+    setIsLoading(true);
+
+    const { email, password } = data;
+
+    try {
+      const resLogin: ResponseAxios = await AccessLogin(email, password);
+
+      if (resLogin.respuesta.type === "ERROR") {
+        setIsFeedback("danger");
+        setFeedback(resLogin.respuesta.feeback);
+      } else {
+      }
+    } catch (error) {}
   };
 
   return (
@@ -24,9 +53,12 @@ export function LoginForm() {
             type="email"
             name="email"
             control={control}
-            defaultValue=""
+            rules={{ required: true }}
             placeholder="Ingresa tu email"
           />
+          <FormFeedback invalid={errors.email ? true : false}>
+            {errors.email && "Escribe tu direccion de correo"}
+          </FormFeedback>
         </FormGroup>
 
         <FormGroup>
@@ -36,15 +68,28 @@ export function LoginForm() {
             type="password"
             name="password"
             control={control}
-            defaultValue=""
+            rules={{ required: true }}
             placeholder="Ingresa tu contraseña"
           />
+          <FormFeedback invalid={errors.password ? true : false}>
+            {errors.password && "Escribe tu contraseña"}
+          </FormFeedback>
         </FormGroup>
 
         <Button type="submit" color="info" block>
           Entrar
         </Button>
       </Form>
+
+      <br />
+
+      <div style={{ textAlign: "center" }}>
+        {isLoading && <SpinnerLoader />}
+      </div>
+
+      <br />
+
+      {isFeeedback && <Alert color={isFeeedback}>{feedback}</Alert>}
     </>
   );
 }
