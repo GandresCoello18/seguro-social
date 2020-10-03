@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { ResponseAxios } from "../interface";
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import UsuarioReducer, { SetMyUser } from "./modulos/usuarios";
+import UsuarioReducer, { SetMyUser, getUsuarios } from "./modulos/usuarios";
 import { TokenLife } from "../api/fetch/login";
 import PersonalReducer, { getPersonal } from "./modulos/personal";
 import PagosReducer, { getMisPagos, getPagos } from "./modulos/pagos";
@@ -28,6 +28,7 @@ export default function generateStore() {
     composeEnhancers(applyMiddleware(thunk))
   );
 
+  getUsuarios()(store.dispatch);
   getPersonal()(store.dispatch);
   getMisPagos()(store.dispatch);
   getPagos()(store.dispatch);

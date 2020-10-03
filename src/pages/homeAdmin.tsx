@@ -1,10 +1,14 @@
 import React from "react";
 import { NavBarAdmin } from "../components/admin/navbar";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux";
 import { CardPagos } from "../components/admin/card-pagos";
 import { TablesUsuarios } from "../components/admin/tables-usuarios";
 import { TablesPersonal } from "../components/admin/tables-personal";
 
 export function HomeAdmin() {
+  const PagosReducer = useSelector((state: RootState) => state.PagosReducer);
+
   return (
     <>
       <NavBarAdmin title="Administracion" />
@@ -22,7 +26,7 @@ export function HomeAdmin() {
       <div className="popular_catagory_area">
         <div className="container">
           <div className="row">
-            <CardPagos />
+            <CardPagos pagos={PagosReducer.pagos} limit={4} />
           </div>
         </div>
       </div>
@@ -34,7 +38,7 @@ export function HomeAdmin() {
 
       <br />
 
-      <TablesUsuarios />
+      <TablesUsuarios limit={4} />
 
       <br />
 
@@ -42,7 +46,7 @@ export function HomeAdmin() {
 
       <br />
 
-      <TablesPersonal />
+      <TablesPersonal limit={4} />
 
       <br />
     </>

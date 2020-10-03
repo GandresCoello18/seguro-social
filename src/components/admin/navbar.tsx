@@ -1,5 +1,7 @@
+import Cookies from "js-cookie";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "reactstrap";
 import { Head } from "../header/head";
 
 interface Props {
@@ -7,6 +9,12 @@ interface Props {
 }
 
 export function NavBarAdmin({ title }: Props) {
+  const cerrar_session = () => {
+    Cookies.remove("access-token");
+    Cookies.remove("isAdmin");
+    window.location.reload();
+  };
+
   return (
     <>
       <Head title={title} />
@@ -56,7 +64,11 @@ export function NavBarAdmin({ title }: Props) {
                   </div>
                   <div className="col-xl-3 col-lg-3 d-none d-lg-block">
                     <div className="Appointment">
-                      <div className="d-none d-lg-block">Cerrar Session</div>
+                      <div className="d-none d-lg-block">
+                        <Button color="danger" block onClick={cerrar_session}>
+                          Cerrar Session
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   <div className="col-12">

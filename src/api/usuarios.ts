@@ -9,3 +9,10 @@ export const create_count = async (data: Usuario_INT) => {
     data,
   });
 };
+
+export const obtener_usuarios = async () => {
+  return await axios({
+    method: "GET",
+    url: `${DOMAIN}/api/usuario`,
+  });
+};

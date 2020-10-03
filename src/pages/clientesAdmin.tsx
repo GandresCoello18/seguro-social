@@ -26,7 +26,7 @@ export function ClientesAdmin() {
             <SearchClientes />
           </div>
           <div className="col-12 col-md-10 text-center">
-            <TablesUsuarios />
+            <TablesUsuarios limit={50} />
           </div>
         </div>
       </section>

@@ -42,4 +42,6 @@ export interface Pago_INT {
   status: string;
   metodo: string;
   monto: string;
+  cedula?: number;
+  email?: string;
 }

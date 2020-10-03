@@ -17,3 +17,20 @@ export const obtenerPagos = async () => {
     url: `${DOMAIN}/api/pagos`,
   });
 };
+
+export const createPagos = async (
+  fecha_pago: string | Date,
+  metodo: string,
+  monto: number
+) => {
+  return await axios({
+    method: "POST",
+    url: `${DOMAIN}/api/pagos`,
+    data: {
+      fecha_pago,
+      metodo,
+      monto,
+    },
+    headers: { "access-token": TOKEN },
+  });
+};

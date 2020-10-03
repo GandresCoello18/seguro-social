@@ -8,6 +8,7 @@ export interface initialData {
   pagos: Array<Pago_INT>;
   MisPagos: Array<Pago_INT>;
   loading: boolean;
+  loading_mis_pagos: boolean;
   error: string;
 }
 
@@ -15,6 +16,7 @@ const initialData: initialData = {
   pagos: [],
   MisPagos: [],
   loading: true,
+  loading_mis_pagos: true,
   error: "",
 };
 

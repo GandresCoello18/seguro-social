@@ -56,7 +56,11 @@ export function LoginForm() {
           Cookies.set("access-token", resLogin.axios.data.token);
           Cookies.set("isAdmin", myUser.axios.data.myUser[0].admin);
           dispatch(SetMyUser([...myUser.axios.data.myUser]));
-          history.push("/mis-pagos");
+          if (myUser.axios.data.myUser[0].admin) {
+            history.push("/administracion");
+          } else {
+            history.push("/mis-pagos");
+          }
         }
       }
       setIsLoading(false);
@@ -73,7 +77,7 @@ export function LoginForm() {
         <FormGroup>
           <Label for="email">Email:</Label>
           <Controller
-            as={Input}
+            as={<Input invalid={errors.email ? true : false} />}
             type="email"
             name="email"
             control={control}
@@ -88,7 +92,7 @@ export function LoginForm() {
         <FormGroup>
           <Label for="password">Contraseña:</Label>
           <Controller
-            as={Input}
+            as={<Input invalid={errors.password ? true : false} />}
             type="password"
             name="password"
             control={control}

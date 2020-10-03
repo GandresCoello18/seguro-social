@@ -1,10 +1,15 @@
 import React from "react";
 import { NavBar } from "../components/layout/navbar";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux";
+import { SpinnerLoader } from "../components/loader/spinner";
 import { CardPagos } from "../components/admin/card-pagos";
 import { Footer } from "../components/layout/fotter";
 import { Link } from "react-router-dom";
 
 export function MisPagos() {
+  const MisPagos = useSelector((state: RootState) => state.PagosReducer);
+
   return (
     <>
       <NavBar title="Mis pagos" />
@@ -35,7 +40,11 @@ export function MisPagos() {
             </div>
           </div>
           <div className="row">
-            <CardPagos />
+            {MisPagos.loading_mis_pagos && <SpinnerLoader />}
+            <CardPagos
+              pagos={MisPagos.MisPagos}
+              limit={MisPagos.MisPagos.length}
+            />
           </div>
         </div>
       </div>

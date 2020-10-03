@@ -1,9 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux";
 import { NavBarAdmin } from "../components/admin/navbar";
 import { CardPagos } from "../components/admin/card-pagos";
 import { SearchPagos } from "../components/admin/searchPagos";
 
 export function PagosAdmin() {
+  const PagosReducer = useSelector((state: RootState) => state.PagosReducer);
+
   return (
     <>
       <NavBarAdmin title="Personal" />
@@ -32,7 +36,10 @@ export function PagosAdmin() {
           <SearchPagos />
           <br />
           <div className="row">
-            <CardPagos />
+            <CardPagos
+              pagos={PagosReducer.pagos}
+              limit={PagosReducer.pagos.length}
+            />
           </div>
         </div>
       </div>
