@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-// import { PublicRoute } from './public';
-// import { PrivateRoute } from './private';
+import { PublicRoute } from "./public";
+import { PrivateRoute } from "./private";
 import { HomePage } from "../pages/home";
 import { NotFound } from "../pages/not-found";
 import { MisPagos } from "../pages/mis-pagos";
@@ -21,14 +21,14 @@ export default function Routes() {
     <Suspense fallback={<div />}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/personal" component={PersonalAdmin} />
-          <Route exact path="/Pagos" component={PagosAdmin} />
-          <Route exact path="/administracion" component={HomeAdmin} />
-          <Route exact path="/clientes" component={ClientesAdmin} />
-          <Route exact path="/medicos" component={MedicosPage} />
-          <Route exact path="/contacto" component={ContactoPage} />
-          <Route exact path="/payment" component={PaymentPage} />
-          <Route exact path="/mis-pagos" component={MisPagos} />
+          <PrivateRoute path="/personal" component={PersonalAdmin} />
+          <PrivateRoute path="/Pagos" component={PagosAdmin} />
+          <PrivateRoute path="/administracion" component={HomeAdmin} />
+          <PrivateRoute path="/clientes" component={ClientesAdmin} />
+          <PublicRoute path="/medicos" component={MedicosPage} />
+          <PublicRoute path="/contacto" component={ContactoPage} />
+          <PrivateRoute path="/payment" component={PaymentPage} />
+          <PrivateRoute path="/mis-pagos" component={MisPagos} />
           <Route exact path="/404" component={NotFound} />
           <Route exact path="/" component={HomePage} />
           <Route exact component={NotFound} />

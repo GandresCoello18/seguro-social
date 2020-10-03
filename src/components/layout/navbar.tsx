@@ -1,13 +1,27 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux";
+import { Usuario_INT } from "../../interface";
 import { Head } from "../header/head";
 import { Link } from "react-router-dom";
 import { ModalInicioSession } from "../header/btn-modal-inicio-session";
+import { Button } from "reactstrap";
+import Cookies from "js-cookie";
 
 interface Props {
   title: string;
 }
 
 export function NavBar({ title }: Props) {
+  const MyUser: Array<Usuario_INT> = useSelector(
+    (state: RootState) => state.UsuarioReducer.myUser
+  );
+
+  const cerrarSession = (): void => {
+    Cookies.remove("access-token");
+    window.location.reload();
+  };
+
   return (
     <>
       <Head title={title} />
@@ -37,6 +51,16 @@ export function NavBar({ title }: Props) {
                           <li>
                             <Link to="/contacto">Contacto</Link>
                           </li>
+                          {MyUser.length > 0 && (
+                            <>
+                              <li>
+                                <Link to="/mis-pagos">Mis pagos</Link>
+                              </li>
+                              <li>
+                                <Link to="/payment">Proximo pago</Link>
+                              </li>
+                            </>
+                          )}
                         </ul>
                       </nav>
                     </div>
@@ -44,7 +68,13 @@ export function NavBar({ title }: Props) {
                   <div className="col-xl-3 col-lg-3 d-none d-lg-block">
                     <div className="Appointment">
                       <div className="d-none d-lg-block">
-                        <ModalInicioSession />
+                        {MyUser.length === 0 ? (
+                          <ModalInicioSession />
+                        ) : (
+                          <Button color="danger" onClick={cerrarSession}>
+                            Cerrar Session
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -1,27 +1,32 @@
 import { Dispatch } from "redux";
+import { obtenerPersonal } from "../../api/personal";
+import { Personal_IMT } from "../../interface";
 
 /// CONSTANTES
 
 export interface initialData {
-  myUser: Array<any>;
+  personal: Array<Personal_IMT>;
   loading: boolean;
   error: string;
 }
 
 const initialData: initialData = {
-  myUser: [],
+  personal: [],
   loading: true,
   error: "",
 };
 
-const GET_MY_USER = "GET_MY_USER";
+const GET_PERSONAL = "GET_PERSONAL";
+const SET_PERSONAL = "SET_PERSONAL";
 
 /// REDUCER
 
 export default function reducer(state = initialData, action: any) {
   switch (action.type) {
-    case GET_MY_USER:
-      return { ...state, myUser: action.payload };
+    case GET_PERSONAL:
+      return { ...state, personal: action.payload, loading: false };
+    case SET_PERSONAL:
+      return { ...state, personal: action.payload };
     default:
       return state;
   }
@@ -29,11 +34,20 @@ export default function reducer(state = initialData, action: any) {
 
 /// ACTIONS
 
-export const getUsuarios = () => (dispatch: Dispatch) => {
-  /*obtenerUsuarios().then(res => {
-        dispatch({
-            type: GET_USUARIOS,
-            payload: res.data,
-        });
-    });*/
+export const getPersonal = () => (dispatch: Dispatch) => {
+  obtenerPersonal().then((res) => {
+    dispatch({
+      type: GET_PERSONAL,
+      payload: res.data,
+    });
+  });
+};
+
+export const SetPersonal = (personal: Array<Personal_IMT>) => (
+  dispatch: Dispatch
+) => {
+  dispatch({
+    type: SET_PERSONAL,
+    payload: personal,
+  });
 };

@@ -9,7 +9,7 @@ interface Props {
 
 export function PrivateRoute({ path, component, ...rest }: Props) {
   if (Cookie.get("access-token") === undefined) {
-    return <Redirect to="/login/iniciar-session" />;
+    return <Redirect to="/" />;
   }
   return <Route exact path={path} component={component} {...rest} />;
 }

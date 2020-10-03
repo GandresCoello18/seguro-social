@@ -1,9 +1,16 @@
+import Cookies from "js-cookie";
+import { ResponseAxios } from "../interface";
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import PersonalReducer from "./modulos/personal";
+import UsuarioReducer, { SetMyUser } from "./modulos/usuarios";
+import { TokenLife } from "../api/fetch/login";
+import PersonalReducer, { getPersonal } from "./modulos/personal";
+import PagosReducer, { getMisPagos, getPagos } from "./modulos/pagos";
 
 const rootReducer = combineReducers({
+  UsuarioReducer,
   PersonalReducer,
+  PagosReducer,
 });
 
 declare global {
@@ -20,6 +27,31 @@ export default function generateStore() {
     rootReducer,
     composeEnhancers(applyMiddleware(thunk))
   );
+
+  getPersonal()(store.dispatch);
+  getMisPagos()(store.dispatch);
+  getPagos()(store.dispatch);
+
+  if (Cookies.get("access-token") !== undefined) {
+    try {
+      const lifeToken = async () => {
+        const tokenLife: ResponseAxios = await TokenLife(
+          Cookies.get("access-token")
+        );
+
+        if (tokenLife.respuesta.type === "ERROR") {
+          console.log(tokenLife.respuesta.feeback);
+        } else {
+          SetMyUser(tokenLife.axios.data.myUser)(store.dispatch);
+        }
+      };
+
+      lifeToken();
+    } catch (error) {
+      console.error(error.message + " error en getMyUser");
+    }
+  }
+
   return store;
 }
 

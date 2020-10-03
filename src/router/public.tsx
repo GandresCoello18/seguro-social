@@ -8,8 +8,8 @@ interface Props {
 }
 
 export function PublicRoute({ path, component, ...rest }: Props) {
-  if (Cookie.get("access-token") !== undefined) {
-    return <Redirect to="/" />;
+  if (Cookie.get("isAdmin") === "true") {
+    return <Redirect to="/administracion" />;
   }
   return <Route exact path={path} component={component} {...rest} />;
 }

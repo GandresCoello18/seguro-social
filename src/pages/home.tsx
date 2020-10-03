@@ -5,6 +5,7 @@ import { Footer } from "../components/layout/fotter";
 import { Personal } from "../components/client/personal";
 import { Companias } from "../components/client/companias";
 import { Testimonio } from "../components/client/testimonio";
+import { TablesPersonal } from "../components/admin/tables-personal";
 
 export function HomePage() {
   return (
@@ -12,7 +13,7 @@ export function HomePage() {
       <NavBar title="Inicio" />
       <Portada />
       <br />
-      <Personal />
+      <TablesPersonal limit={4} />
       <br />
       <Companias />
       <br />
