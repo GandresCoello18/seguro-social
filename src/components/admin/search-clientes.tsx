@@ -20,7 +20,7 @@ export function SearchClientes() {
     <>
       <Form onSubmit={handleSubmit(send)}>
         <div className="row justify-content-center">
-          <div className="col-4">
+          <div className="col-2">
             <FormGroup>
               <Controller
                 name="tipo"
@@ -53,7 +53,7 @@ export function SearchClientes() {
               />
             </FormGroup>
           </div>
-          <div className="col-4">
+          <div className="col-3">
             <Button type="submit" color="info" block>
               Buscar
             </Button>

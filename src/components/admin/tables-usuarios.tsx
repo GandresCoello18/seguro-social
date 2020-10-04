@@ -1,6 +1,7 @@
 import React from "react";
 import { SpinnerLoader } from "../loader/spinner";
-import { Badge, Button, Table } from "reactstrap";
+import { Badge, Table } from "reactstrap";
+import { EliminarUserBtn } from "./eliminar_user";
 import { Usuario_INT } from "../../interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
@@ -49,7 +50,7 @@ export function TablesUsuarios({ limit }: Props) {
                         </Badge>
                       </td>
                       <td>
-                        <Button color="danger">Eliminar</Button>
+                        <EliminarUserBtn id_user={user.id_user} />
                       </td>
                     </tr>
                   ))}

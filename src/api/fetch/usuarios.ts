@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Respuesta, Usuario_INT } from "../../interface";
-import { create_count } from "../usuarios";
+import { create_count, eliminar_usuarios } from "../usuarios";
 
 let respuesta: Respuesta = { feeback: "", type: "EXITO" };
 
@@ -17,16 +17,19 @@ export const CreateCountUser = async (user: Usuario_INT) => {
   }
 };
 
-/*export const DeleteUser = async (id: number | string) => {
+export const DeleteUser = async (id: string) => {
   try {
-    const axios: AxiosResponse = await eliminarUser(id);
+    const axios: AxiosResponse = await eliminar_usuarios(id);
     if (axios.data.feeback) {
-      respuesta = { feeback: axios.data.feeback, type: 'ERROR' };
+      respuesta = { feeback: axios.data.feeback, type: "ERROR" };
     } else {
       if (axios.data.removed) {
-        respuesta = { feeback: `EL USUARIO FUE ELIMINADO`, type: 'EXITO' };
+        respuesta = { feeback: `EL USUARIO FUE ELIMINADO`, type: "EXITO" };
       } else {
-        respuesta = { feeback: `OCURRIO UN ERROR AL ELIMINAR EL USUARIO`, type: 'ERROR' };
+        respuesta = {
+          feeback: `OCURRIO UN ERROR AL ELIMINAR EL USUARIO`,
+          type: "ERROR",
+        };
       }
     }
 
@@ -35,4 +38,3 @@ export const CreateCountUser = async (user: Usuario_INT) => {
     return error.message;
   }
 };
-*/
