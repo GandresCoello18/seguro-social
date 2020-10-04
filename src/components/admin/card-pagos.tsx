@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import moment from "moment";
+import { Link } from "react-router-dom";
 import { Pago_INT } from "../../interface";
 import { Badge } from "reactstrap";
 import Cookies from "js-cookie";
@@ -33,7 +34,13 @@ export function CardPagos({ pagos, limit }: Props) {
               <span>$ {pago.monto}</span> {pago.metodo}
             </p>
             <br />
-            <button className="btn btn-info form-control">Detalles</button>
+            <Link
+              to={`/factura/${pago.id_pago}`}
+              target="_blank"
+              className="btn btn-info form-control"
+            >
+              Detalles
+            </Link>
           </div>
         </div>
       ))}
