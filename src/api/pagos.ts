@@ -18,10 +18,14 @@ export const obtenerPagos = async () => {
   });
 };
 
+///// PETICIONES POST
+
 export const createPagos = async (
   fecha_pago: string | Date,
   metodo: string,
-  monto: number
+  monto: number,
+  id_user?: string,
+  admin?: boolean
 ) => {
   return await axios({
     method: "POST",
@@ -30,7 +34,19 @@ export const createPagos = async (
       fecha_pago,
       metodo,
       monto,
+      id_user,
+      admin,
     },
+    headers: { "access-token": TOKEN },
+  });
+};
+
+///// PETICION DELETE
+
+export const deletePagos = async (id_pago: number) => {
+  return await axios({
+    method: "DELETE",
+    url: `${DOMAIN}/api/pagos/${id_pago}`,
     headers: { "access-token": TOKEN },
   });
 };

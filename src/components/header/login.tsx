@@ -59,7 +59,7 @@ export function LoginForm() {
           if (myUser.axios.data.myUser[0].admin) {
             history.push("/administracion");
           } else {
-            history.push("/mis-pagos");
+            window.location.reload();
           }
         }
       }

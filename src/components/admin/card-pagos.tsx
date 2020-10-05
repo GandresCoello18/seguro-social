@@ -1,8 +1,12 @@
 import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { Pago_INT } from "../../interface";
-import { Badge } from "reactstrap";
+import { DeletePago } from "../../api/fetch/pagos";
+import { useSelector, useDispatch } from "react-redux";
+import { SetPagos } from "../../redux/modulos/pagos";
+import { Pago_INT, ResponseAxios } from "../../interface";
+import { Badge, Button } from "reactstrap";
+import { RootState, Dispatch } from "../../redux";
 import Cookies from "js-cookie";
 
 interface Props {
@@ -11,12 +15,30 @@ interface Props {
 }
 
 export function CardPagos({ pagos, limit }: Props) {
+  const dispatch: Dispatch = useDispatch();
+  const PagosReducer: Array<Pago_INT> = useSelector(
+    (state: RootState) => state.PagosReducer.pagos
+  );
+  const delete_pago = async (id_pago: number | undefined | any) => {
+    const resDelete: ResponseAxios = await DeletePago(id_pago);
+
+    if (resDelete.respuesta.type === "ERROR") {
+      console.log(resDelete.respuesta.feeback);
+    } else {
+      const index: number = PagosReducer.findIndex(
+        (item) => item.id_pago === id_pago
+      );
+      PagosReducer.splice(index, 1);
+      dispatch(SetPagos([...PagosReducer]));
+    }
+  };
+
   return (
     <>
       {pagos.slice(0, limit).map((pago) => (
         <div className="col-lg-4 col-xl-3 col-md-6" key={pago.id_pago}>
           <div className="single_catagory">
-            {Cookies.get("access-token") && (
+            {Cookies.get("isAdmin") === "true" && (
               <div className="text-center">
                 <strong>Cliente: </strong>
                 <Badge color="secondary">{pago.email}</Badge>
@@ -41,6 +63,16 @@ export function CardPagos({ pagos, limit }: Props) {
             >
               Detalles
             </Link>
+            {Cookies.get("isAdmin") === "true" && (
+              <Button
+                color="danger"
+                onClick={() => delete_pago(pago.id_pago)}
+                className="mt-3"
+                block
+              >
+                ELiminar
+              </Button>
+            )}
           </div>
         </div>
       ))}

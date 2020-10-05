@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { CreateCountUser } from "../../api/fetch/usuarios";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, Dispatch } from "../../redux";
+import { SetUsuarios } from "../../redux/modulos/usuarios";
 import { Usuario_INT, ResponseAxios } from "../../interface";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -25,6 +28,7 @@ interface Client {
 }
 
 export function CreateCLient() {
+  const dispatch: Dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFeeedback, setIsFeeedback] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
@@ -36,6 +40,10 @@ export function CreateCLient() {
 
   const { control, handleSubmit, errors } = useForm<Client>();
 
+  const UsuarioReducer: Array<Usuario_INT> = useSelector(
+    (state: RootState) => state.UsuarioReducer.usuarios
+  );
+
   const send = async (data: Client) => {
     setIsFeeedback("");
     setIsLoading(true);
@@ -45,6 +53,7 @@ export function CreateCLient() {
       ...data,
       status: "",
       password: "",
+      admin: true,
     };
 
     const resCreate: ResponseAxios = await CreateCountUser(user);
@@ -55,6 +64,8 @@ export function CreateCLient() {
     } else {
       setIsFeeedback("success");
       setFeedback("Usuario creado correctamente.");
+      dispatch(SetUsuarios([...UsuarioReducer, ...resCreate.axios.data]));
+      setModal(false);
     }
 
     setIsLoading(false);

@@ -85,7 +85,8 @@ export function FormPayment() {
     if (MisPagos.length === 0) {
       fecha_pago = fecha_actual();
     } else {
-      const ultimo_pago: string = MisPagos[MisPagos.length - 1].fecha_pago;
+      const ultimo_pago: string = MisPagos.reverse()[MisPagos.length - 1]
+        .fecha_pago;
       fecha_pago = new Date(ultimo_pago).setMonth(
         new Date(ultimo_pago).getMonth() + 1
       );

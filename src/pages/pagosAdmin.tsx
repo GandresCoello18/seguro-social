@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux";
+import { CreatePagoModal } from "../components/admin/create-pago";
 import { NavBarAdmin } from "../components/admin/navbar";
 import { CardPagos } from "../components/admin/card-pagos";
 import { SearchPagos } from "../components/admin/searchPagos";
@@ -33,7 +34,14 @@ export function PagosAdmin() {
               </div>
             </div>
           </div>
-          <SearchPagos />
+          <div className="row">
+            <div className="col-2">
+              <CreatePagoModal />
+            </div>
+            <div className="col-10">
+              <SearchPagos />
+            </div>
+          </div>
           <br />
           <div className="row">
             <CardPagos
