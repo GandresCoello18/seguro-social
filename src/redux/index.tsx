@@ -6,11 +6,13 @@ import UsuarioReducer, { SetMyUser, getUsuarios } from "./modulos/usuarios";
 import { TokenLife } from "../api/fetch/login";
 import PersonalReducer, { getPersonal } from "./modulos/personal";
 import PagosReducer, { getMisPagos, getPagos } from "./modulos/pagos";
+import HorariosReducer, { getHorarios } from "./modulos/horarios";
 
 const rootReducer = combineReducers({
   UsuarioReducer,
   PersonalReducer,
   PagosReducer,
+  HorariosReducer,
 });
 
 declare global {
@@ -32,6 +34,7 @@ export default function generateStore() {
   getPersonal()(store.dispatch);
   getMisPagos()(store.dispatch);
   getPagos()(store.dispatch);
+  getHorarios()(store.dispatch);
 
   if (Cookies.get("access-token") !== undefined) {
     try {

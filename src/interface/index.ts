@@ -46,3 +46,30 @@ export interface Pago_INT {
   email?: string;
   admin?: boolean;
 }
+
+export interface Horario_INT {
+  readonly id_horario: string;
+  id_personal: number;
+  jornada: string;
+  dia: string;
+  nombres?: string;
+  apellido?: string;
+  cargo?: string;
+  imagen?: string;
+}
+
+export interface Cita_INT {
+  readonly id_cita: string;
+  id_horario: string;
+  id_user: string;
+  status_cita: string;
+  fecha_cita: string;
+  hora_cita: string;
+  id_personal?: number;
+  jornada?: string;
+  dia?: string;
+  nombres?: string;
+  apellido?: string;
+  cargo?: string;
+  imagen?: string;
+}

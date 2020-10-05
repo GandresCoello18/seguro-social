@@ -54,6 +54,16 @@ export function NavBarAdmin({ title }: Props) {
                             </Link>
                           </li>
                           <li>
+                            <Link to="/horario" style={{ color: "#000" }}>
+                              Horarios
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/citas" style={{ color: "#000" }}>
+                              Citas
+                            </Link>
+                          </li>
+                          <li>
                             <Link to="/pagos" style={{ color: "#000" }}>
                               Pagos
                             </Link>

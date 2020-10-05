@@ -16,6 +16,8 @@ import { HomeAdmin } from "../pages/homeAdmin";
 import { ClientesAdmin } from "../pages/clientesAdmin";
 import { PersonalAdmin } from "../pages/personalAdmin";
 import { PagosAdmin } from "../pages/pagosAdmin";
+import { HorarioPage } from "../pages/horarioAdmin";
+import { CitasAdminPage } from "../pages/citasAdmin";
 
 export default function Routes() {
   return (
@@ -25,6 +27,8 @@ export default function Routes() {
           <PrivateRoute path="/personal" component={PersonalAdmin} />
           <PrivateRoute path="/Pagos" component={PagosAdmin} />
           <PrivateRoute path="/administracion" component={HomeAdmin} />
+          <PrivateRoute path="/horario" component={HorarioPage} />
+          <PrivateRoute path="/citas" component={CitasAdminPage} />
           <PrivateRoute path="/clientes" component={ClientesAdmin} />
           <PublicRoute path="/medicos" component={MedicosPage} />
           <PublicRoute path="/contacto" component={ContactoPage} />
