@@ -62,7 +62,9 @@ export interface Cita_INT {
   readonly id_cita: string;
   id_horario: string;
   id_user: string;
-  status_cita: string;
+  email?: string;
+  cedula?: number;
+  status_cita?: string;
   fecha_cita: string;
   hora_cita: string;
   id_personal?: number;

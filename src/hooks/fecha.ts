@@ -23,3 +23,21 @@ function agregar_ceros_dia(dia: number) {
   }
   return dia;
 }
+
+export function getMondays(date: Date, day: number) {
+  var d = date || new Date(),
+    month = d.getMonth(),
+    fecha = [];
+  d.setDate(1);
+
+  while (d.getDay() !== day) {
+    d.setDate(d.getDate() + 1);
+  }
+
+  while (d.getMonth() === month) {
+    fecha.push(new Date(d.getTime()));
+    d.setDate(d.getDate() + 7);
+  }
+
+  return fecha;
+}

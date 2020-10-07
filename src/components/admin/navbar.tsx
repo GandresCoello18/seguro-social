@@ -26,7 +26,7 @@ export function NavBarAdmin({ title }: Props) {
                 <div className="row align-items-center">
                   <div className="col-xl-3 col-lg-2">
                     <div className="logo">
-                      <Link to="/">
+                      <Link to="/administracion">
                         <img src="img/logo.png" alt="" />
                       </Link>
                     </div>

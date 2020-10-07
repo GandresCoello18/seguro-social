@@ -35,7 +35,11 @@ export function Portada() {
                     data-wow-duration="1s"
                     data-wow-delay=".5s"
                   >
-                    <a href="/" className="boxed-btn3">
+                    <a
+                      href="http://www.ecuadorlegalonline.com/laboral/afiliacion-al-iess/"
+                      target="_blank"
+                      className="boxed-btn3"
+                    >
                       Empezar con mi seguro
                     </a>
                   </div>

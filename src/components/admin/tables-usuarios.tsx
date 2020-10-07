@@ -1,6 +1,6 @@
 import React from "react";
 import { SpinnerLoader } from "../loader/spinner";
-import { Badge, Table } from "reactstrap";
+import { Alert, Badge, Table } from "reactstrap";
 import { EliminarUserBtn } from "./eliminar_user";
 import { Usuario_INT } from "../../interface";
 import { useSelector } from "react-redux";
@@ -61,6 +61,14 @@ export function TablesUsuarios({ limit }: Props) {
                     ))}
                 </tbody>
               </Table>
+              {UsuarioReducer.usuarios.filter(
+                (user: Usuario_INT) =>
+                  user.id_user !== UsuarioReducer.myUser[0].id_user
+              ).length === 0 && (
+                <Alert color="info">
+                  Por el momento no hay datos de usuario para mostrar.
+                </Alert>
+              )}
             </div>
           </div>
         </div>

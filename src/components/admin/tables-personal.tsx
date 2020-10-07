@@ -47,8 +47,6 @@ export function TablesPersonal({ limit }: Props) {
                 <p>{personal.cargo}</p>
                 <br />
                 <button className="btn btn-info">Detalles</button>
-                &nbsp; &nbsp;
-                <button className="btn btn-danger">Eliminar</button>
               </div>
             </div>
           ))}

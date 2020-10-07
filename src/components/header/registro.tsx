@@ -139,7 +139,7 @@ export function RegistroForm({ setVisibleRegitro }: Props) {
           </FormFeedback>
         </FormGroup>
 
-        <Button type="submit" color="primary" block>
+        <Button type="submit" disabled={isLoading} color="primary" block>
           Registrarme
         </Button>
       </Form>

@@ -104,7 +104,7 @@ export function LoginForm() {
           </FormFeedback>
         </FormGroup>
 
-        <Button type="submit" color="info" block>
+        <Button type="submit" disabled={isLoading} color="info" block>
           Entrar
         </Button>
       </Form>
