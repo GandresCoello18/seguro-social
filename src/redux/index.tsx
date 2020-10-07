@@ -34,12 +34,12 @@ export default function generateStore() {
 
   getUsuarios()(store.dispatch);
   getPersonal()(store.dispatch);
-  getMisPagos()(store.dispatch);
   getPagos()(store.dispatch);
   getHorarios()(store.dispatch);
   getCitas()(store.dispatch);
 
   if (Cookies.get("access-token") !== undefined) {
+    getMisPagos()(store.dispatch);
     try {
       const lifeToken = async () => {
         const tokenLife: ResponseAxios = await TokenLife(
