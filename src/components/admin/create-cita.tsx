@@ -47,12 +47,16 @@ export function CreateCita() {
   const [Medico, setMedico] = useState<string>("");
   const [FechasCitas, setFechasCItas] = useState<Array<Date>>([]);
   const [HorasCitas, setHorasCitas] = useState<Array<string>>([]);
+  const [SelectMes, setSelectMes] = useState<string>(fecha_actual());
 
   const Horario: Array<Horario_INT> = useSelector(
     (state: RootState) => state.HorariosReducer.horarios
   );
   const Usuario: Array<Usuario_INT> = useSelector(
     (state: RootState) => state.UsuarioReducer.usuarios
+  );
+  const MyUser: Array<Usuario_INT> = useSelector(
+    (state: RootState) => state.UsuarioReducer.myUser
   );
   const citas: Array<Cita_INT> = useSelector(
     (state: RootState) => state.CitasReducer.citas
@@ -91,6 +95,17 @@ export function CreateCita() {
     setIsLoading(false);
   };
 
+  const updateMes = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    if (e.target.value[5] === "0") {
+      const mes = e.target.value[6];
+      const sub = e.target.value.substr(0, 5);
+      setSelectMes(sub + mes);
+    } else {
+      setSelectMes(e.target.value + "-1");
+    }
+  };
+
   const selectHorario = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const solo = Horario.find((item) => item.id_horario === e.target.value);
     setMedico(solo?.nombres + " " + solo?.apellido + " - " + solo?.cargo);
@@ -118,7 +133,7 @@ export function CreateCita() {
         dia = 0;
         break;
     }
-    setFechasCItas(getMondays(new Date(fecha_actual()), dia));
+    setFechasCItas(getMondays(new Date(SelectMes), dia));
 
     switch (solo?.jornada) {
       case "Mañana":
@@ -159,122 +174,146 @@ export function CreateCita() {
 
   return (
     <>
-      <Button color="primary" onClick={toggle}>
-        Crear nueva cita
-      </Button>
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Nueva cita</ModalHeader>
-        <ModalBody>
-          <Form onSubmit={handleSubmit(send)}>
-            <FormGroup>
-              <Label for="email">Horario:</Label>
-              <select
-                name="id_horario"
-                onChange={selectHorario}
-                ref={register({ required: true })}
-                className="form-control"
-              >
-                {Horario.map((horario) => (
-                  <option value={horario.id_horario}>
-                    ( Jornada ) {horario.jornada} - ( Dia ) {horario.dia}
-                  </option>
-                ))}
-              </select>
-              <FormFeedback invalid={errors.id_horario ? true : false}>
-                {errors.id_horario && "Seleccione el horario"}
-              </FormFeedback>
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="email">Medico:</Label>
-              <input
-                className="form-control"
-                disabled={true}
-                type="text"
-                defaultValue={Medico}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="email">Usuario:</Label>
-              <select
-                name="id_user"
-                ref={register({ required: true })}
-                className="form-control"
-              >
-                {Usuario.map((user) => (
-                  <option value={user.id_user}>
-                    {user.cedula} - {user.email}
-                  </option>
-                ))}
-              </select>
-              <FormFeedback invalid={errors.id_user ? true : false}>
-                {errors.id_user && "Seleccione el usuario"}
-              </FormFeedback>
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="password">Fecha:</Label>
-              <select
-                className="form-control"
-                disabled={FechasCitas?.length === 0}
-                name="fecha_cita"
-                ref={register({ required: true })}
-              >
-                {FechasCitas?.map((fecha) => (
-                  <option value={fecha.toString()}>
-                    {moment(fecha).format("LL")}
-                  </option>
-                ))}
-              </select>
-              <FormFeedback invalid={errors.fecha_cita ? true : false}>
-                {errors.fecha_cita && "Seleccione la fecha"}
-              </FormFeedback>
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="password">Hora:</Label>
-              <Controller
-                as={<Input invalid={errors.hora_cita ? true : false} />}
-                type="time"
-                name="hora_cita"
-                control={control}
-                disabled={HorasCitas.length === 0}
-                list="listalimitestiempo"
-                rules={{ required: true }}
-                placeholder="Ingresa la fecha"
-              />
-              <datalist id="listalimitestiempo">
-                {HorasCitas.map((hora) => (
-                  <option value={hora}>{hora}</option>
-                ))}
-              </datalist>
-              <FormFeedback invalid={errors.hora_cita ? true : false}>
-                {errors.hora_cita && "Seleccione la hora"}
-              </FormFeedback>
-            </FormGroup>
-
-            <Button type="submit" disabled={isLoading} color="warning" block>
-              Registrar cita
-            </Button>
-          </Form>
-
-          <br />
-
-          <div style={{ textAlign: "center" }}>
-            {isLoading && <SpinnerLoader />}
-          </div>
-
-          <br />
-
-          {isFeeedback && <Alert color={isFeeedback}>{feedback}</Alert>}
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={toggle}>
-            Salir
+      {MyUser.length > 0 && (
+        <>
+          <Button color="primary" onClick={toggle}>
+            Crear nueva cita
           </Button>
-        </ModalFooter>
-      </Modal>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Nueva cita</ModalHeader>
+            <ModalBody>
+              <Form onSubmit={handleSubmit(send)}>
+                <FormGroup>
+                  <Label for="password">Seleccionar mes:</Label>
+                  <input
+                    type="month"
+                    min="2020-10"
+                    className="form-control"
+                    onChange={updateMes}
+                    defaultValue={fecha_actual()}
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="email">Horario:</Label>
+                  <select
+                    name="id_horario"
+                    onChange={selectHorario}
+                    ref={register({ required: true })}
+                    className="form-control"
+                  >
+                    {Horario.map((horario) => (
+                      <option value={horario.id_horario}>
+                        ( Jornada ) {horario.jornada} - ( Dia ) {horario.dia}
+                      </option>
+                    ))}
+                  </select>
+                  <FormFeedback invalid={errors.id_horario ? true : false}>
+                    {errors.id_horario && "Seleccione el horario"}
+                  </FormFeedback>
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="email">Medico:</Label>
+                  <input
+                    className="form-control"
+                    disabled={true}
+                    type="text"
+                    defaultValue={Medico}
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="email">Usuario:</Label>
+                  <select
+                    name="id_user"
+                    ref={register({ required: true })}
+                    className="form-control"
+                  >
+                    {Usuario.filter(
+                      (user) => user.id_user !== MyUser[0].id_user
+                    ).map((user) => (
+                      <option value={user.id_user}>
+                        {user.cedula} - {user.email}
+                      </option>
+                    ))}
+                  </select>
+                  <FormFeedback invalid={errors.id_user ? true : false}>
+                    {errors.id_user && "Seleccione el usuario"}
+                  </FormFeedback>
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="password">
+                    Fechas asignadas por este horario:
+                  </Label>
+                  <select
+                    className="form-control"
+                    disabled={FechasCitas?.length === 0}
+                    name="fecha_cita"
+                    ref={register({ required: true })}
+                  >
+                    {FechasCitas?.map((fecha) => (
+                      <option value={fecha.toString()}>
+                        {moment(fecha).format("LL")}
+                      </option>
+                    ))}
+                  </select>
+                  <FormFeedback invalid={errors.fecha_cita ? true : false}>
+                    {errors.fecha_cita && "Seleccione la fecha"}
+                  </FormFeedback>
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="password">Hora:</Label>
+                  <Controller
+                    as={<Input invalid={errors.hora_cita ? true : false} />}
+                    type="time"
+                    name="hora_cita"
+                    control={control}
+                    disabled={HorasCitas.length === 0}
+                    list="listalimitestiempo"
+                    rules={{ required: true }}
+                    placeholder="Ingresa la fecha"
+                  />
+                  <datalist id="listalimitestiempo">
+                    {HorasCitas.map((hora) => (
+                      <option value={hora}>{hora}</option>
+                    ))}
+                  </datalist>
+                  <FormFeedback invalid={errors.hora_cita ? true : false}>
+                    {errors.hora_cita && "Seleccione la hora"}
+                  </FormFeedback>
+                </FormGroup>
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  color="warning"
+                  block
+                >
+                  Registrar cita
+                </Button>
+              </Form>
+
+              <br />
+
+              <div style={{ textAlign: "center" }}>
+                {isLoading && <SpinnerLoader />}
+              </div>
+
+              <br />
+
+              {isFeeedback && <Alert color={isFeeedback}>{feedback}</Alert>}
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={toggle}>
+                Salir
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </>
+      )}
     </>
   );
 }
