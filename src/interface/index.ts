@@ -30,7 +30,7 @@ export interface ResponseAxios {
 export interface Contacto_INT {
   readonly id_contacto?: number;
   mensaje: string;
-  nombre: string;
+  nombres: string;
   correo: string;
   tema: string;
 }

@@ -17,7 +17,7 @@ export function ClientesAdmin() {
       <br />
       <br />
 
-      <h2 className="text-center">Todos los usuarios</h2>
+      <h2 className="text-center">Todos los Afiliados</h2>
 
       <br />
 

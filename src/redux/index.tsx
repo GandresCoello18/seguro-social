@@ -8,6 +8,7 @@ import PersonalReducer, { getPersonal } from "./modulos/personal";
 import PagosReducer, { getMisPagos, getPagos } from "./modulos/pagos";
 import HorariosReducer, { getHorarios } from "./modulos/horarios";
 import CitasReducer, { getCitas } from "./modulos/citas";
+import ContactosReducer, { getContactos } from "./modulos/contactos";
 
 const rootReducer = combineReducers({
   UsuarioReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   PagosReducer,
   HorariosReducer,
   CitasReducer,
+  ContactosReducer,
 });
 
 declare global {
@@ -37,6 +39,7 @@ export default function generateStore() {
   getPagos()(store.dispatch);
   getHorarios()(store.dispatch);
   getCitas()(store.dispatch);
+  getContactos()(store.dispatch);
 
   if (Cookies.get("access-token") !== undefined) {
     getMisPagos()(store.dispatch);

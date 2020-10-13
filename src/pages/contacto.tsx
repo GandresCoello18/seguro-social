@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { CreateContacto } from "../api/fetch/contacto";
 import { NavBar } from "../components/layout/navbar";
 import { Contacto_INT, ResponseAxios } from "../interface";
 import { Alert } from "reactstrap";
+import { Dispatch, RootState } from "../redux";
+import { SetContactos } from "../redux/modulos/contactos";
 
 import { Footer } from "../components/layout/fotter";
 
@@ -15,6 +18,10 @@ interface Contacto {
 }
 
 export function ContactoPage() {
+  const dispatch: Dispatch = useDispatch();
+  const Contacto: Array<Contacto_INT> = useSelector(
+    (state: RootState) => state.ContactosReducer.contacto
+  );
   const [feedback, setFeedback] = useState<string>("");
   const [isFeedback, setIsFeedback] = useState<string>("");
 
@@ -26,7 +33,7 @@ export function ContactoPage() {
 
     const obj: Contacto_INT = {
       mensaje: message,
-      nombre: name,
+      nombres: name,
       correo: email,
       tema: subject,
     };
@@ -40,6 +47,7 @@ export function ContactoPage() {
       } else {
         setIsFeedback("success");
         setFeedback("Su mensaje fue enviado con exito");
+        dispatch(SetContactos([...Contacto, ...resContact.axios.data]));
       }
     } catch (error) {
       setIsFeedback("danger");

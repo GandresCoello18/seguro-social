@@ -13,11 +13,9 @@ export function HomePage() {
       <NavBar title="Inicio" />
       <Portada />
       <br />
-      <h2 className="text-center">Algunos Personales</h2>
+      <h2 className="text-center">Algunos Medicos</h2>
       <br />
       <TablesPersonal limit={4} />
-      <br />
-      <Companias />
       <br />
       <Testimonio />
       <Footer />

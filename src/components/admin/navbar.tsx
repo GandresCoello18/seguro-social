@@ -45,12 +45,12 @@ export function NavBarAdmin({ title }: Props) {
                           </li>
                           <li>
                             <Link to="/clientes" style={{ color: "#000" }}>
-                              Clientes
+                              Afiliados
                             </Link>
                           </li>
                           <li>
                             <Link to="/personal" style={{ color: "#000" }}>
-                              Personal
+                              Medicos
                             </Link>
                           </li>
                           <li>
@@ -66,6 +66,11 @@ export function NavBarAdmin({ title }: Props) {
                           <li>
                             <Link to="/pagos" style={{ color: "#000" }}>
                               Pagos
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/mensajes" style={{ color: "#000" }}>
+                              Mensajes
                             </Link>
                           </li>
                         </ul>

@@ -28,7 +28,7 @@ export function Portada() {
                     data-wow-duration="1s"
                     data-wow-delay=".4s"
                   >
-                    Seguro social campecino, "La Teresa"
+                    Seguro social campesino, "La Teresa"
                   </p>
                   <div
                     className="sldier_btn wow fadeInLeft"
@@ -40,7 +40,7 @@ export function Portada() {
                       target="_blank"
                       className="boxed-btn3"
                     >
-                      Empezar con mi seguro
+                      Requisitos para mi seguro
                     </a>
                   </div>
                 </div>

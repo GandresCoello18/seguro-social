@@ -34,7 +34,7 @@ export function HomeAdmin() {
       <br />
       <br />
 
-      <h2 className="text-center">Ultimos Usuarios</h2>
+      <h2 className="text-center">Ultimos Afiliados</h2>
 
       <br />
 
@@ -42,12 +42,11 @@ export function HomeAdmin() {
 
       <br />
 
-      <h2 className="text-center">Ultimos Personal</h2>
+      <h2 className="text-center">Ultimos Medicos</h2>
 
       <br />
 
       <TablesPersonal limit={4} />
-
       <br />
     </>
   );

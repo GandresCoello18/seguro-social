@@ -4,6 +4,7 @@ import { SpinnerLoader } from "../loader/spinner";
 import { DOMAIN } from "../../config/domain";
 import { RootState } from "../../redux";
 import { Personal_IMT } from "../../interface";
+import { Link } from "react-router-dom";
 
 interface Props {
   limit?: number;
@@ -46,7 +47,9 @@ export function TablesPersonal({ limit }: Props) {
                 </a>
                 <p>{personal.cargo}</p>
                 <br />
-                <button className="btn btn-info">Detalles</button>
+                <Link to={`medico-detalle/${personal.id_personal}`}>
+                  <button className="btn btn-info">Detalles</button>
+                </Link>
               </div>
             </div>
           ))}
