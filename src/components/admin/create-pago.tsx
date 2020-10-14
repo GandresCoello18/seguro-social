@@ -75,7 +75,7 @@ export function CreatePagoModal() {
     const resPayment: ResponseAxios = await CreatePago(
       fecha_pago,
       data.metodo,
-      data.monto,
+      5,
       data.id_user,
       true
     );

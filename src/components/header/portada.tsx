@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 export function Portada() {
+  const [modal, setModal] = useState<boolean>(false);
+
+  const toggle = () => setModal(!modal);
+
   return (
     <>
       <div className="slider_area">
@@ -35,13 +40,9 @@ export function Portada() {
                     data-wow-duration="1s"
                     data-wow-delay=".5s"
                   >
-                    <a
-                      href="http://www.ecuadorlegalonline.com/laboral/afiliacion-al-iess/"
-                      target="_blank"
-                      className="boxed-btn3"
-                    >
+                    <button onClick={toggle} className="boxed-btn3">
                       Requisitos para mi seguro
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -56,6 +57,28 @@ export function Portada() {
           <img src="img/banner/illustration.png" alt="" />
         </div>
       </div>
+
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Requisitos para seguro</ModalHeader>
+        <ModalBody>
+          <p>
+            Para tramitar su seguro social campesino, necesita cumplir con estos
+            requerimiento.
+          </p>
+          <ol>
+            <li>Vivir en el campo actualmente</li>
+            <li>Datos personales como ( Nombres y apellidos, ect )</li>
+            <li>Dirección o lugar de recidencia</li>
+            <li>Copia de cedula y papel de votación</li>
+            <li>Cancelar 20 dolares de la inscripción</li>
+          </ol>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggle}>
+            Salir
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 }

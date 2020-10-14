@@ -80,7 +80,7 @@ export function FormPayment() {
       localStorage.setItem("credito", JSON.stringify(credito));
     }
 
-    const monto = Math.floor(Math.random() * (50 - 10)) + 10;
+    const monto = 5;
 
     if (MisPagos.length === 0) {
       fecha_pago = fecha_actual();

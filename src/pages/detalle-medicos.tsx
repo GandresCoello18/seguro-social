@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { Personal_IMT } from "../interface";
 import { RootState } from "../redux";
 import { SpinnerLoader } from "../components/loader/spinner";
+import { NavBarAdmin } from "../components/admin/navbar";
 
 interface Params {
   id_medico: string;
@@ -35,6 +36,13 @@ export function DetalleMedicoPage() {
 
   return (
     <>
+      <NavBarAdmin title="Detalles del Medico" />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       {detalleMedico.length > 0 ? (
         <section
           className="container"
