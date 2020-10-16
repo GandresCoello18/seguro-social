@@ -7,6 +7,11 @@ export interface Usuario_INT {
   password: string;
   status: string;
   admin?: boolean;
+  nombres: string;
+  apellidos: string;
+  sexo: string;
+  fecha_nacimiento: string;
+  fecha_registro: string;
 }
 
 export interface Personal_IMT {

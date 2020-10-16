@@ -19,12 +19,17 @@ import {
   Alert,
 } from "reactstrap";
 import { SpinnerLoader } from "../loader/spinner";
+import { fecha_actual } from "../../hooks/fecha";
 
 interface Client {
   cedula: number;
   email: string;
   password?: string;
   admin?: boolean;
+  nombres: string;
+  apellidos: string;
+  sexo: string;
+  fecha_nacimiento: string;
 }
 
 export function CreateCLient() {
@@ -38,7 +43,7 @@ export function CreateCLient() {
     setIsFeeedback("");
   };
 
-  const { control, handleSubmit, errors } = useForm<Client>();
+  const { control, handleSubmit, register, errors } = useForm<Client>();
 
   const UsuarioReducer: Array<Usuario_INT> = useSelector(
     (state: RootState) => state.UsuarioReducer.usuarios
@@ -56,16 +61,21 @@ export function CreateCLient() {
       admin: true,
     };
 
-    const resCreate: ResponseAxios = await CreateCountUser(user);
+    if (user.cedula.toString().length === 10) {
+      const resCreate: ResponseAxios = await CreateCountUser(user);
 
-    if (resCreate.respuesta.type === "ERROR") {
-      setIsFeeedback("danger");
-      setFeedback(resCreate.respuesta.feeback);
+      if (resCreate.respuesta.type === "ERROR") {
+        setIsFeeedback("danger");
+        setFeedback(resCreate.respuesta.feeback);
+      } else {
+        setIsFeeedback("success");
+        setFeedback("Usuario creado correctamente.");
+        dispatch(SetUsuarios([...UsuarioReducer, ...resCreate.axios.data]));
+        setModal(false);
+      }
     } else {
-      setIsFeeedback("success");
-      setFeedback("Usuario creado correctamente.");
-      dispatch(SetUsuarios([...UsuarioReducer, ...resCreate.axios.data]));
-      setModal(false);
+      setIsFeeedback("danger");
+      setFeedback("La cedula debe contener 10 caracteres.");
     }
 
     setIsLoading(false);
@@ -86,12 +96,43 @@ export function CreateCLient() {
                 as={<Input invalid={errors.cedula ? true : false} />}
                 type="number"
                 name="cedula"
+                min={0}
                 control={control}
                 rules={{ required: true }}
                 placeholder="Ingresa tu cedula"
               />
               <FormFeedback invalid={errors.cedula ? true : false}>
                 {errors.cedula && "Escribe tu numero de indentificacion"}
+              </FormFeedback>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="nombres">Nombres:</Label>
+              <Controller
+                as={<Input invalid={errors.nombres ? true : false} />}
+                type="text"
+                name="nombres"
+                control={control}
+                rules={{ required: true }}
+                placeholder="Ingresa tus nombres"
+              />
+              <FormFeedback invalid={errors.nombres ? true : false}>
+                {errors.cedula && "Escribe tus nombres"}
+              </FormFeedback>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="apellidos">Apellidos:</Label>
+              <Controller
+                as={<Input invalid={errors.apellidos ? true : false} />}
+                type="text"
+                name="apellidos"
+                control={control}
+                rules={{ required: true }}
+                placeholder="Ingresa tus apellidos"
+              />
+              <FormFeedback invalid={errors.apellidos ? true : false}>
+                {errors.apellidos && "Escribe tus apellidos"}
               </FormFeedback>
             </FormGroup>
 
@@ -107,6 +148,37 @@ export function CreateCLient() {
               />
               <FormFeedback invalid={errors.email ? true : false}>
                 {errors.email && "Escribe tu contraseña"}
+              </FormFeedback>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="sexo">Sexo:</Label>
+              <select
+                name="sexo"
+                ref={register({ required: true })}
+                className="form-control"
+              >
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+              </select>
+              <FormFeedback invalid={errors.sexo ? true : false}>
+                {errors.sexo && "Seleccione su sexo"}
+              </FormFeedback>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="fecha_nacimiento">Fecha de nacimiento:</Label>
+              <Controller
+                as={<Input invalid={errors.fecha_nacimiento ? true : false} />}
+                type="date"
+                max={fecha_actual()}
+                name="fecha_nacimiento"
+                control={control}
+                rules={{ required: true }}
+                placeholder="Selecciona tu fecha de nacimiento"
+              />
+              <FormFeedback invalid={errors.fecha_nacimiento ? true : false}>
+                {errors.fecha_nacimiento && "Selecciona tu fecha de nacimiento"}
               </FormFeedback>
             </FormGroup>
 

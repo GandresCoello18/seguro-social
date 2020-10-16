@@ -45,6 +45,10 @@ export function RegistroForm({ setVisibleRegitro }: Props) {
             email,
             password,
             status: "",
+            nombres: "",
+            apellidos: "",
+            sexo: "",
+            fecha_nacimiento: "",
           };
 
           const CreateUser: ResponseAxios = await CreateCountUser(user);

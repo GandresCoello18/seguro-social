@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { Usuario_INT } from "../../interface";
 import { Head } from "../header/head";
+import { UpdatePassword } from "../client/update-password";
 import { Link } from "react-router-dom";
 import { ModalInicioSession } from "../header/btn-modal-inicio-session";
-import { Button } from "reactstrap";
+import { Badge, Button } from "reactstrap";
 import Cookies from "js-cookie";
 
 interface Props {
@@ -16,6 +17,8 @@ export function NavBar({ title }: Props) {
   const MyUser: Array<Usuario_INT> = useSelector(
     (state: RootState) => state.UsuarioReducer.myUser
   );
+
+  const [visible, setVisible] = useState<boolean>(false);
 
   const cerrarSession = (): void => {
     Cookies.remove("access-token");
@@ -59,6 +62,15 @@ export function NavBar({ title }: Props) {
                               <li>
                                 <Link to="/payment">Proximo pago</Link>
                               </li>
+                              <li>
+                                <a href="#" onClick={() => setVisible(true)}>
+                                  Cambiar clave
+                                </a>
+                              </li>
+                              <UpdatePassword
+                                visible={visible}
+                                setModal={setVisible}
+                              />
                             </>
                           )}
                         </ul>
@@ -71,9 +83,15 @@ export function NavBar({ title }: Props) {
                         {MyUser.length === 0 ? (
                           <ModalInicioSession />
                         ) : (
-                          <Button color="danger" onClick={cerrarSession}>
-                            Cerrar Session
-                          </Button>
+                          <>
+                            <Badge color="secondary p-1" pill>
+                              {MyUser[0].email}
+                            </Badge>
+                            &nbsp; &nbsp;
+                            <Button color="danger" onClick={cerrarSession}>
+                              Cerrar Session
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>

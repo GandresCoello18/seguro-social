@@ -24,9 +24,9 @@ export function ModalInicioSession() {
           <LoginForm />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => setVisibleRegitro(true)}>
+          {/*<Button color="primary" onClick={() => setVisibleRegitro(true)}>
             Crear cuenta !
-          </Button>{" "}
+          </Button>*/}
           <Button color="danger" onClick={() => setVisibleLogin(false)}>
             Salir
           </Button>

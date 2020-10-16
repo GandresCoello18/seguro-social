@@ -5,7 +5,7 @@ import { DeletePago } from "../../api/fetch/pagos";
 import { useSelector, useDispatch } from "react-redux";
 import { SetPagos } from "../../redux/modulos/pagos";
 import { Pago_INT, ResponseAxios } from "../../interface";
-import { Badge, Button } from "reactstrap";
+import { Badge, Button, Alert } from "reactstrap";
 import { RootState, Dispatch } from "../../redux";
 import Cookies from "js-cookie";
 
@@ -76,6 +76,12 @@ export function CardPagos({ pagos, limit }: Props) {
           </div>
         </div>
       ))}
+
+      {pagos.length === 0 && (
+        <Alert color="info">
+          Por el momento no existen datos para mostrar.
+        </Alert>
+      )}
     </>
   );
 }
