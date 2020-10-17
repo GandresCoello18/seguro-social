@@ -14,6 +14,17 @@ export interface Usuario_INT {
   fecha_registro?: string;
 }
 
+export interface Grupo_afiliados_INT {
+  readonly id_grupo?: number;
+  id_user: string;
+  tipo_familiar: string;
+  nombres: string;
+  apellidos: string;
+  sexo: string;
+  fecha_nacimiento: string;
+  status_grupo?: string;
+}
+
 export interface Personal_IMT {
   readonly id_personal?: number;
   nombres: string;

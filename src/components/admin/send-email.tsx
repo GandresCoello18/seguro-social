@@ -105,6 +105,7 @@ export function BtnSendEmail({ email }: Props) {
           </Form>
 
           {isLoading && <SpinnerLoader />}
+          <br />
           {isFeeedback && <Alert color={isFeeedback}>{feedback}</Alert>}
         </ModalBody>
         <ModalFooter>

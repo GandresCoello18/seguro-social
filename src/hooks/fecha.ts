@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function fecha_actual() {
   const date = new Date();
   let ano = date.getFullYear();
@@ -44,4 +46,12 @@ export function getMondays(date: Date, day: number) {
 
 export function incrementarMes(ultimo_pago: any) {
   return new Date(ultimo_pago).setMonth(new Date(ultimo_pago).getMonth() + 1);
+}
+
+export function diferencia_de_años(data: any): number {
+  return moment(new Date(data)).diff(
+    moment(new Date(fecha_actual())),
+    "years",
+    true
+  );
 }

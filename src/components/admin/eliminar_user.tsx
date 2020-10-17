@@ -33,7 +33,7 @@ export function EliminarUserBtn({ id_user }: Props) {
   return (
     <>
       <Button color="danger" onClick={remove_user}>
-        Eliminar
+        Quitar
       </Button>
     </>
   );
