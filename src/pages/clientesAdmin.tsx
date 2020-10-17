@@ -29,7 +29,7 @@ export function ClientesAdmin() {
           <div className="col-12 col-md-3">
             <CreateCLient />
           </div>
-          <div className="col-12 col-md-10 text-center">
+          <div className="col-12 text-center">
             <TablesUsuarios limit={50} />
           </div>
         </div>

@@ -1,24 +1,12 @@
 import { AxiosResponse } from "axios";
 import { Respuesta } from "../../interface";
-import { createPagos, deletePagos } from "../pagos";
+import { crearPersonal, DeletePersonal } from "../personal";
 
 let respuesta: Respuesta = { feeback: "", type: "EXITO" };
 
-export const CreatePago = async (
-  fecha_pago: Date | any,
-  metodo: string,
-  monto: number,
-  id_user?: string,
-  admin?: boolean
-) => {
+export const CreatePersona = async (personal: FormData) => {
   try {
-    const axios: AxiosResponse = await createPagos(
-      fecha_pago,
-      metodo,
-      monto,
-      id_user,
-      admin
-    );
+    const axios: AxiosResponse = await crearPersonal(personal);
     if (axios.data.feeback) {
       respuesta = { feeback: axios.data.feeback, type: "ERROR" };
     }
@@ -29,17 +17,17 @@ export const CreatePago = async (
   }
 };
 
-export const DeletePago = async (id: number) => {
+export const RemovePersonal = async (id: number) => {
   try {
-    const axios: AxiosResponse = await deletePagos(id);
+    const axios: AxiosResponse = await DeletePersonal(id);
     if (axios.data.feeback) {
       respuesta = { feeback: axios.data.feeback, type: "ERROR" };
     } else {
       if (axios.data.removed) {
-        respuesta = { feeback: `EL PAGO FUE ELIMINADO`, type: "EXITO" };
+        respuesta = { feeback: `EL PERSONAL FUE ELIMINADO`, type: "EXITO" };
       } else {
         respuesta = {
-          feeback: `OCURRIO UN ERROR AL ELIMINAR EL PAGO`,
+          feeback: `OCURRIO UN ERROR AL ELIMINAR EL PERSONAL`,
           type: "ERROR",
         };
       }

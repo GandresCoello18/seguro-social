@@ -11,7 +11,7 @@ export interface Usuario_INT {
   apellidos: string;
   sexo: string;
   fecha_nacimiento: string;
-  fecha_registro: string;
+  fecha_registro?: string;
 }
 
 export interface Personal_IMT {

@@ -17,13 +17,14 @@ import {
   Input,
   FormFeedback,
   Alert,
+  Badge,
 } from "reactstrap";
 import { SpinnerLoader } from "../loader/spinner";
-import { fecha_actual } from "../../hooks/fecha";
+import { fecha_actual, incrementarMes } from "../../hooks/fecha";
+import moment from "moment";
 
 interface Pago {
   id_user: string;
-  monto: number;
   metodo: string;
 }
 
@@ -34,6 +35,8 @@ export function CreatePagoModal() {
   const [feedback, setFeedback] = useState<string>("");
   const [modal, setModal] = useState<boolean>(false);
   const [myIdUser, setMyIdUser] = useState<string>("");
+  const [fecha_pago, setFecha_pago] = useState<Date | number>(0);
+  const [pagosAtrasado, setPagoAtrasado] = useState<number>(0);
   const toggle = () => {
     setModal(!modal);
     setIsFeeedback("");
@@ -44,7 +47,7 @@ export function CreatePagoModal() {
   );
   const PagosReducer = useSelector((state: RootState) => state.PagosReducer);
 
-  const { control, handleSubmit, errors, register } = useForm<Pago>();
+  const { handleSubmit, errors, register } = useForm<Pago>();
 
   useEffect(() => {
     if (UsuarioReducer.myUser.length > 0) {
@@ -56,7 +59,7 @@ export function CreatePagoModal() {
     setIsFeeedback("");
     setIsLoading(true);
 
-    let fecha_pago: string | Date | number;
+    /*let fecha_pago: string | Date | number;
 
     const susPagos = PagosReducer.pagos
       .reverse()
@@ -70,10 +73,10 @@ export function CreatePagoModal() {
         new Date(ultimo_pago).getMonth() + 1
       );
       fecha_pago = new Date(fecha_pago);
-    }
+    }*/
 
     const resPayment: ResponseAxios = await CreatePago(
-      fecha_pago,
+      moment(new Date(fecha_pago)).format(),
       data.metodo,
       5,
       data.id_user,
@@ -93,6 +96,36 @@ export function CreatePagoModal() {
     setIsLoading(false);
   };
 
+  const selectUser = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    const select_user: string = event.target.value;
+    const user: Usuario_INT = UsuarioReducer.usuarios.find(
+      (user: Usuario_INT) => user.id_user === select_user
+    );
+    const userPago: Array<Pago_INT> = PagosReducer.pagos.filter(
+      (pago: Pago_INT) => pago.id_user === select_user
+    );
+
+    let date_pago;
+    let thisMes: any;
+    if (userPago.length === 0) {
+      thisMes = user.fecha_registro;
+      date_pago = incrementarMes(thisMes);
+      setFecha_pago(date_pago);
+    } else {
+      const ultimo_pago: string = userPago.reverse()[userPago.length - 1]
+        .fecha_pago;
+      thisMes = ultimo_pago;
+      date_pago = incrementarMes(ultimo_pago);
+      setFecha_pago(date_pago);
+    }
+    let meses_atrasos = moment(new Date(thisMes)).diff(
+      moment(new Date(fecha_actual())),
+      "months",
+      true
+    );
+    setPagoAtrasado(Math.abs(meses_atrasos));
+  };
+
   return (
     <>
       <Button color="primary" onClick={toggle}>
@@ -107,6 +140,7 @@ export function CreatePagoModal() {
               <select
                 name="id_user"
                 className="form-control"
+                onChange={selectUser}
                 ref={register({ required: true })}
               >
                 {UsuarioReducer.usuarios
@@ -122,6 +156,35 @@ export function CreatePagoModal() {
               </FormFeedback>
             </FormGroup>
 
+            <div
+              style={{
+                padding: 5,
+                border: 2,
+                borderRadius: 10,
+                borderStyle: "solid",
+                borderColor: "reyalblue",
+              }}
+            >
+              {fecha_pago === 0 ? (
+                <Alert color="info">Selecciona un afiliado...</Alert>
+              ) : (
+                <>
+                  <p style={{ fontSize: 20 }}>
+                    Siguiente Pago:{" "}
+                    <Badge color="warning">
+                      {moment(new Date(fecha_pago)).format("LL")}
+                    </Badge>
+                  </p>
+                  <p style={{ fontSize: 20 }}>
+                    Pagos Atrasados:{" "}
+                    <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
+                      {pagosAtrasado?.toFixed()}
+                    </Badge>
+                  </p>
+                </>
+              )}
+            </div>
+
             <FormGroup>
               <Label for="cedula">Metodo:</Label>
               <select
@@ -133,23 +196,8 @@ export function CreatePagoModal() {
                 <option value="Trasferencia">Trasferencia</option>
                 <option value="Tarjeta de credito">Tarjeta de credito</option>
               </select>
-              <FormFeedback invalid={errors.id_user ? true : false}>
-                {errors.id_user && "Escribe tu numero de indentificacion"}
-              </FormFeedback>
-            </FormGroup>
-
-            <FormGroup>
-              <Label for="email">Monto:</Label>
-              <Controller
-                as={<Input invalid={errors.monto ? true : false} />}
-                type="number"
-                name="monto"
-                control={control}
-                rules={{ required: true }}
-                placeholder="Ingresa el monto a pagar"
-              />
-              <FormFeedback invalid={errors.monto ? true : false}>
-                {errors.monto && "Escribe el monto a pagar"}
+              <FormFeedback invalid={errors.metodo ? true : false}>
+                {errors.metodo && "Selecciona el metodo de pago"}
               </FormFeedback>
             </FormGroup>
 

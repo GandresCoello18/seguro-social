@@ -41,3 +41,7 @@ export function getMondays(date: Date, day: number) {
 
   return fecha;
 }
+
+export function incrementarMes(ultimo_pago: any) {
+  return new Date(ultimo_pago).setMonth(new Date(ultimo_pago).getMonth() + 1);
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { DetallesPayment } from "./detalles-de-compra";
-import { Pago_INT, ResponseAxios } from "../../interface";
+import { Pago_INT, ResponseAxios, Usuario_INT } from "../../interface";
 import { CreatePago } from "../../api/fetch/pagos";
 import {
   Form,
@@ -12,9 +12,11 @@ import {
   Button,
   FormFeedback,
   Alert,
+  Badge,
 } from "reactstrap";
 import { RootState } from "../../redux";
-import { fecha_actual } from "../../hooks/fecha";
+import { fecha_actual, incrementarMes } from "../../hooks/fecha";
+import moment from "moment";
 
 interface Pago {
   metodo?: string;
@@ -44,6 +46,10 @@ export function FormPayment() {
   const MisPagos: Array<Pago_INT> = useSelector(
     (state: RootState) => state.PagosReducer.MisPagos
   );
+  const MyUser: Array<Usuario_INT> = useSelector(
+    (state: RootState) => state.UsuarioReducer.myUser
+  );
+
   const { control, errors, handleSubmit } = useForm<Pago>();
   const [mes, setMes] = useState<number>(0);
   const [ano, setAno] = useState<number>(0);
@@ -51,13 +57,35 @@ export function FormPayment() {
   const [isFedback, setIsFedback] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
   const [credito, setCredito] = useState<Pago>();
+  const [fecha_pago, setFecha_pago] = useState<Date | number>(0);
+  const [pagosAtrasado, setPagoAtrasado] = useState<number>(0);
 
   useEffect(() => {
     if (localStorage.getItem("credito")) {
       const jsonCredito: string | null | any = localStorage.getItem("credito");
       setCredito(JSON.parse(jsonCredito));
     }
-  }, []);
+
+    let date_pago;
+    let thisMes: any;
+    if (MisPagos.length === 0) {
+      thisMes = MyUser[0].fecha_registro;
+      date_pago = incrementarMes(thisMes);
+      setFecha_pago(date_pago);
+    } else {
+      const ultimo_pago: string = MisPagos.reverse()[MisPagos.length - 1]
+        .fecha_pago;
+      thisMes = ultimo_pago;
+      date_pago = incrementarMes(ultimo_pago);
+      setFecha_pago(date_pago);
+    }
+    let meses_atrasos = moment(new Date(thisMes)).diff(
+      moment(new Date(fecha_actual())),
+      "months",
+      true
+    );
+    setPagoAtrasado(Math.abs(meses_atrasos));
+  }, [MisPagos, MyUser, incrementarMes]);
 
   const send = async (data: Pago) => {
     setIsFedback("");
@@ -66,7 +94,6 @@ export function FormPayment() {
     data.mesCard = mes;
     data.yearCard = ano;
     data.metodo = "Tarjeta de credito";
-    let fecha_pago: string | Date | number;
 
     if (isProximoPago) {
       const credito = {
@@ -82,20 +109,9 @@ export function FormPayment() {
 
     const monto = 5;
 
-    if (MisPagos.length === 0) {
-      fecha_pago = fecha_actual();
-    } else {
-      const ultimo_pago: string = MisPagos.reverse()[MisPagos.length - 1]
-        .fecha_pago;
-      fecha_pago = new Date(ultimo_pago).setMonth(
-        new Date(ultimo_pago).getMonth() + 1
-      );
-      fecha_pago = new Date(fecha_pago);
-    }
-
     try {
       const resPayment: ResponseAxios = await CreatePago(
-        fecha_pago,
+        moment(new Date(fecha_pago)).format(),
         data.metodo,
         monto
       );
@@ -106,7 +122,9 @@ export function FormPayment() {
       } else {
         setIsFedback("success");
         setFeedback(
-          `Su pago de seguro fue registrada, pago para la fecha: ${fecha_pago}, ver en la seccion de ( mis pagos )`
+          `Su pago de seguro fue registrada, pago para la fecha: ${moment(
+            new Date(fecha_pago)
+          ).format("LL")}, ver en la seccion de ( mis pagos )`
         );
       }
     } catch (error) {
@@ -118,7 +136,15 @@ export function FormPayment() {
   return (
     <>
       <Form onSubmit={handleSubmit(send)}>
-        <h2>Pagar</h2>
+        <h2>
+          Pagar: <u>{moment(new Date(fecha_pago)).format("LL")}</u>
+        </h2>
+        <h2>
+          Pagos atrasados:{" "}
+          <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
+            {pagosAtrasado?.toFixed()}
+          </Badge>
+        </h2>
 
         <div style={{ padding: 10 }}>
           <FormGroup check>

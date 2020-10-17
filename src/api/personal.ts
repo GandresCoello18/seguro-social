@@ -9,3 +9,23 @@ export const obtenerPersonal = async () => {
     url: `${DOMAIN}/api/personal`,
   });
 };
+
+/// PETICIONES POST
+
+export const crearPersonal = async (data: FormData) => {
+  return await axios({
+    method: "POST",
+    url: `${DOMAIN}/api/personal`,
+    data,
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+
+///  PETICION DELETE
+
+export const DeletePersonal = async (id: number) => {
+  return await axios({
+    method: "DELETE",
+    url: `${DOMAIN}/api/personal/${id}`,
+  });
+};

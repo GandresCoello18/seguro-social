@@ -1,6 +1,7 @@
 import React from "react";
 import { SpinnerLoader } from "../loader/spinner";
 import { Alert, Badge, Table } from "reactstrap";
+import moment from "moment";
 import { EliminarUserBtn } from "./eliminar_user";
 import { Usuario_INT } from "../../interface";
 import { useSelector } from "react-redux";
@@ -25,7 +26,11 @@ export function TablesUsuarios({ limit }: Props) {
                 <thead>
                   <tr>
                     <th>Cedula</th>
+                    <th>Nombres</th>
+                    <th>Apellido</th>
                     <th>Email</th>
+                    <th>Fecha nacimiento</th>
+                    <th>Registrado en</th>
                     <th>Estado</th>
                     <th>Opciones</th>
                   </tr>
@@ -41,7 +46,11 @@ export function TablesUsuarios({ limit }: Props) {
                     .map((user: Usuario_INT) => (
                       <tr key={user.id_user}>
                         <th>{user.cedula}</th>
+                        <th>{user.nombres}</th>
+                        <th>{user.apellidos}</th>
                         <td>{user.email}</td>
+                        <td>{moment(user.fecha_nacimiento).format("LL")}</td>
+                        <td>{moment(user.fecha_registro).format("LL")}</td>
                         <td>
                           <Badge
                             style={{ fontSize: 17 }}

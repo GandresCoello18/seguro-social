@@ -5,6 +5,8 @@ import { DOMAIN } from "../../config/domain";
 import { RootState } from "../../redux";
 import { Personal_IMT } from "../../interface";
 import { Link } from "react-router-dom";
+import { EliminarPersonalBtn } from "../admin/eliminar-personal";
+import Cookies from "js-cookie";
 
 interface Props {
   limit?: number;
@@ -30,7 +32,7 @@ export function TablesPersonal({ limit }: Props) {
         <div className="row justify-content-center">
           {personales.slice(0, limit).map((personal) => (
             <div
-              className="col-12 col-md-4 col-lg-3 mt-2 mb-2"
+              className="col-12 col-md-4 col-lg-3 mt-3 mb-3"
               key={personal.id_personal}
             >
               <div className="single_candidates text-center">
@@ -38,6 +40,7 @@ export function TablesPersonal({ limit }: Props) {
                   <img
                     src={`${DOMAIN}/static/personal/${personal.imagen}`}
                     alt={personal.nombres + " " + personal.apellido}
+                    style={{ maxWidth: 130 }}
                   />
                 </div>
                 <a href="/">
@@ -50,6 +53,10 @@ export function TablesPersonal({ limit }: Props) {
                 <Link to={`medico-detalle/${personal.id_personal}`}>
                   <button className="btn btn-info">Detalles</button>
                 </Link>
+                &nbsp;
+                {Cookies.get("isAdmin") === "true" && (
+                  <EliminarPersonalBtn id_personal={personal.id_personal} />
+                )}
               </div>
             </div>
           ))}
