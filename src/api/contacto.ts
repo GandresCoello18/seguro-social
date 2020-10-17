@@ -21,6 +21,17 @@ export const crear_contacto = async (data: Contacto_INT) => {
   });
 };
 
+export const sendEmailcontacto = async (email: string, message: string) => {
+  return await axios({
+    method: "POST",
+    url: `${DOMAIN}/api/contacto/send`,
+    data: {
+      email,
+      message,
+    },
+  });
+};
+
 ///// PETICIONES DELETE
 
 export const eliminar_contacto = async (id_contacto: number) => {

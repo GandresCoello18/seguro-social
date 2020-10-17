@@ -1,6 +1,10 @@
 import { AxiosResponse } from "axios";
 import { Respuesta, Contacto_INT } from "../../interface";
-import { crear_contacto, eliminar_contacto } from "../contacto";
+import {
+  crear_contacto,
+  eliminar_contacto,
+  sendEmailcontacto,
+} from "../contacto";
 
 let respuesta: Respuesta = { feeback: "", type: "EXITO" };
 
@@ -31,6 +35,24 @@ export const DeleteContacto = async (id: number) => {
           type: "ERROR",
         };
       }
+    }
+
+    return { axios, respuesta };
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const EnviarCorreo = async (correo: string, message: string) => {
+  try {
+    const axios: AxiosResponse = await sendEmailcontacto(correo, message);
+    if (axios.data.send) {
+      respuesta = { feeback: `EL MENSAJE FUE ENVIADO`, type: "EXITO" };
+    } else {
+      respuesta = {
+        feeback: `OCURRIO UN ERROR AL ENVIAR EL MENSAJE`,
+        type: "ERROR",
+      };
     }
 
     return { axios, respuesta };

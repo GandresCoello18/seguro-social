@@ -3,6 +3,7 @@ import { Alert, Table } from "reactstrap";
 import { useSelector } from "react-redux";
 import { Contacto_INT } from "../../interface";
 import { SpinnerLoader } from "../loader/spinner";
+import { BtnSendEmail } from "./send-email";
 import { RootState } from "../../redux";
 import { EliminarContactoBtn } from "./eliminar-contacto";
 
@@ -32,6 +33,8 @@ export function TableContacto() {
               <td>{user.tema}</td>
               <td>{user.mensaje}</td>
               <td>
+                <BtnSendEmail email={user.correo} />
+                &nbsp; &nbsp;
                 <EliminarContactoBtn id_contacto={user.id_contacto} />
               </td>
             </tr>
