@@ -55,3 +55,11 @@ export function diferencia_de_años(data: any): number {
     true
   );
 }
+
+export function diferencia_de_meses(data: any): number {
+  return moment(new Date(data)).diff(
+    moment(new Date(fecha_actual())),
+    "months",
+    true
+  );
+}

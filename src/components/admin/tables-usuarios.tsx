@@ -3,12 +3,13 @@ import { SpinnerLoader } from "../loader/spinner";
 import { Alert, Badge, Table } from "reactstrap";
 import moment from "moment";
 import { EliminarUserBtn } from "./eliminar_user";
-import { Usuario_INT } from "../../interface";
+import { Pago_INT, Usuario_INT } from "../../interface";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { AgregarIntegranteAfiliado } from "./agregar-integrante-afiliado";
 import { VerIntegrantes } from "./ver-integrantes";
 import { ValidateStatusUser } from "../../hooks/color-row-user";
+import { validateStatus } from "../../hooks/validate-status";
 
 interface Props {
   limit: number;
@@ -20,11 +21,36 @@ export function TablesUsuarios({ limit }: Props) {
     (state: RootState) => state.UsuarioReducer
   );
 
+  const Pagos: Array<Pago_INT> = useSelector(
+    (state: RootState) => state.PagosReducer.pagos
+  );
+
   return (
     <>
       {UsuarioReducer.myUser.length > 0 && (
         <div className="container-fluid">
-          <div className="row justify-content-center">
+          <div className="row justify-content-center mt-5">
+            <div className="col-5">
+              <Badge
+                style={{
+                  fontSize: 15,
+                  backgroundColor: "#d4edda",
+                  color: "#000",
+                }}
+              >
+                Al dia
+              </Badge>
+              &nbsp; &nbsp;
+              <Badge
+                style={{
+                  fontSize: 15,
+                  backgroundColor: "#f8d7da",
+                  color: "#000",
+                }}
+              >
+                Atrasado
+              </Badge>
+            </div>
             <div className="col-12 col-md-10">
               <Table striped bordered hover className="text-center">
                 <thead>
@@ -48,7 +74,10 @@ export function TablesUsuarios({ limit }: Props) {
                     )
                     .slice(0, limit)
                     .map((user: Usuario_INT) => (
-                      <tr key={user.id_user}>
+                      <tr
+                        key={user.id_user}
+                        className={validateStatus(user, Pagos)}
+                      >
                         <th>{user.cedula}</th>
                         <th>{user.nombres}</th>
                         <th>{user.apellidos}</th>

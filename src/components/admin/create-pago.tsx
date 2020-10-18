@@ -20,7 +20,11 @@ import {
   Badge,
 } from "reactstrap";
 import { SpinnerLoader } from "../loader/spinner";
-import { fecha_actual, incrementarMes } from "../../hooks/fecha";
+import {
+  diferencia_de_meses,
+  fecha_actual,
+  incrementarMes,
+} from "../../hooks/fecha";
 import moment from "moment";
 
 interface Pago {
@@ -118,11 +122,7 @@ export function CreatePagoModal() {
       date_pago = incrementarMes(ultimo_pago);
       setFecha_pago(date_pago);
     }
-    let meses_atrasos = moment(new Date(thisMes)).diff(
-      moment(new Date(fecha_actual())),
-      "months",
-      true
-    );
+    let meses_atrasos = diferencia_de_meses(thisMes);
     setPagoAtrasado(Math.abs(meses_atrasos));
   };
 
