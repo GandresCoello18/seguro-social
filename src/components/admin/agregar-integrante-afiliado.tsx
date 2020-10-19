@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Tooltip,
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
 import { diferencia_de_años, fecha_actual } from "../../hooks/fecha";
@@ -20,6 +21,7 @@ import { SetGrupos } from "../../redux/modulos/grupos";
 import { useDispatch, useSelector } from "react-redux";
 import { IntegrarAlGrupo } from "../../api/fetch/grupo";
 import { Grupo_afiliados_INT, ResponseAxios } from "../../interface";
+import { BsPersonPlusFill } from "react-icons/bs";
 
 interface Props {
   id_afiliado: string;
@@ -43,7 +45,8 @@ export function AgregarIntegranteAfiliado({
   setIsReload,
 }: Props) {
   const dispatch: Dispatch = useDispatch();
-
+  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
+  const toggleToolti = () => setTooltipOpen(!tooltipOpen);
   const [modal, setModal] = useState<boolean>(false);
   const toggle = () => {
     setModal(!modal);
@@ -100,9 +103,17 @@ export function AgregarIntegranteAfiliado({
 
   return (
     <>
-      <Button color="success" onClick={toggle}>
-        + integrante
+      <Button id="TooltipAddAfiliado" color="success" onClick={toggle}>
+        <BsPersonPlusFill />
       </Button>
+      <Tooltip
+        placement="right"
+        isOpen={tooltipOpen}
+        target="TooltipAddAfiliado"
+        toggle={toggleToolti}
+      >
+        Agregar integrantes al afiliado
+      </Tooltip>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           Agregar integrante a:{" "}

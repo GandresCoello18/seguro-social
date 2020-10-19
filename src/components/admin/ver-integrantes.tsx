@@ -10,11 +10,13 @@ import {
   ModalFooter,
   ModalHeader,
   Table,
+  Tooltip,
 } from "reactstrap";
 import { ValidateStatusUser } from "../../hooks/color-row-user";
 import { Grupo_afiliados_INT } from "../../interface";
 import { EliminarGrupoBtn } from "./eliminar-grupo";
 import { RootState } from "../../redux";
+import { BsPeopleFill } from "react-icons/bs";
 
 interface Props {
   id_afiliado: string;
@@ -22,6 +24,8 @@ interface Props {
 }
 
 export function VerIntegrantes({ id_afiliado, isReload }: Props) {
+  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
+  const toggleToolti = () => setTooltipOpen(!tooltipOpen);
   const [modal, setModal] = useState<boolean>(false);
   const [feedback, setFeedback] = useState<string>("");
   const toggle = () => setModal(!modal);
@@ -46,9 +50,17 @@ export function VerIntegrantes({ id_afiliado, isReload }: Props) {
 
   return (
     <>
-      <Button color="primary" onClick={toggle}>
-        Integrantes
+      <Button id="TooltipVerAfiliado" color="primary" onClick={toggle}>
+        <BsPeopleFill />
       </Button>
+      <Tooltip
+        placement="right"
+        isOpen={tooltipOpen}
+        target="TooltipVerAfiliado"
+        toggle={toggleToolti}
+      >
+        Ver integrantes del afiliado
+      </Tooltip>
       <Modal isOpen={modal} size="lg" toggle={toggle}>
         <ModalHeader toggle={toggle}>Sus integrantes</ModalHeader>
         <ModalBody>

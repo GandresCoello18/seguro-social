@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { DeleteUser } from "../../api/fetch/usuarios";
-import { Button } from "reactstrap";
+import { Button, Tooltip } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { ResponseAxios, Usuario_INT } from "../../interface";
 import { SetUsuarios } from "../../redux/modulos/usuarios";
 import { RootState, Dispatch } from "../../redux";
+import { BsXSquareFill } from "react-icons/bs";
 
 interface Props {
   id_user: string;
 }
 
 export function EliminarUserBtn({ id_user }: Props) {
+  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
+  const toggle = () => setTooltipOpen(!tooltipOpen);
   const dispatch: Dispatch = useDispatch();
   const UserReducer: Array<Usuario_INT> = useSelector(
     (state: RootState) => state.UsuarioReducer.usuarios
@@ -32,9 +35,17 @@ export function EliminarUserBtn({ id_user }: Props) {
 
   return (
     <>
-      <Button color="danger" onClick={remove_user}>
-        Quitar
+      <Button id="TooltipAfiliado" color="danger" onClick={remove_user}>
+        <BsXSquareFill />
       </Button>
+      <Tooltip
+        placement="right"
+        isOpen={tooltipOpen}
+        target="TooltipAfiliado"
+        toggle={toggle}
+      >
+        ELiminar afiliado
+      </Tooltip>
     </>
   );
 }
