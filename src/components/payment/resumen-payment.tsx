@@ -22,7 +22,7 @@ export function ResumenPayment() {
         >
           <div className="col-5">Precio original:</div>
           <div className="col-3">
-            $ <Badge color="light">200 USA</Badge>
+            $ <Badge color="light">5 USA</Badge>
           </div>
 
           <div className="col-5">Descuento:</div>
@@ -38,7 +38,7 @@ export function ResumenPayment() {
             <h4>Total:</h4>
           </div>
           <div className="col-3">
-            $ <Badge color="light">200 USA</Badge>
+            $ <Badge color="light">5 USA</Badge>
           </div>
 
           <div className="col-12">

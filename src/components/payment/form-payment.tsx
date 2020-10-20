@@ -15,11 +15,7 @@ import {
   Badge,
 } from "reactstrap";
 import { RootState } from "../../redux";
-import {
-  diferencia_de_meses,
-  fecha_actual,
-  incrementarMes,
-} from "../../hooks/fecha";
+import { diferencia_de_meses, incrementarMes } from "../../hooks/fecha";
 import moment from "moment";
 
 interface Pago {
@@ -58,6 +54,7 @@ export function FormPayment() {
   const [mes, setMes] = useState<number>(0);
   const [ano, setAno] = useState<number>(0);
   const [isProximoPago, setIsProximoPago] = useState<boolean>(false);
+  const [MetodoPago, setMetodoPago] = useState<string | any>("Tarjeta");
   const [isFedback, setIsFedback] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
   const [credito, setCredito] = useState<Pago>();
@@ -135,185 +132,223 @@ export function FormPayment() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(send)}>
-        <h2>
-          Pagar: <u>{moment(new Date(fecha_pago)).format("LL")}</u>
-        </h2>
-        <h2>
-          Pagos atrasados:{" "}
-          <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
-            {pagosAtrasado?.toFixed()}
-          </Badge>
-        </h2>
+      <h2>
+        Pagar: <u>{moment(new Date(fecha_pago)).format("LL")}</u>
+      </h2>
+      <h2>
+        Pagos atrasados:{" "}
+        <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
+          {pagosAtrasado?.toFixed()}
+        </Badge>
+      </h2>
 
-        <div style={{ padding: 10 }}>
-          <FormGroup check>
-            <Label check>
-              <Input type="radio" name="metodo" defaultChecked={true} /> Tarjeta
-              de credito
-            </Label>
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input type="radio" name="metodo" disabled={true} /> Paypal
-            </Label>
-          </FormGroup>
-        </div>
-
-        <div style={{ backgroundColor: "#f8f8f9", padding: 20 }}>
-          <FormGroup>
-            <Controller
-              as={
-                <Input
-                  defaultValue={credito?.nombreCard}
-                  invalid={errors.nombreCard ? true : false}
-                />
-              }
-              type="text"
-              name="nombreCard"
-              control={control}
-              rules={{ required: true }}
-              defaultValue={credito?.nombreCard}
-              placeholder="Nombre de la tarjeta"
-            />
-            <FormFeedback invalid={errors.nombreCard ? true : false}>
-              {errors.nombreCard && "Escribe el nombre de la tarjeta"}
-            </FormFeedback>
-          </FormGroup>
-
-          <FormGroup>
-            <Controller
-              as={<Input invalid={errors.numeroCard ? true : false} />}
-              type="number"
-              name="numeroCard"
-              control={control}
-              defaultValue={credito?.numeroCard}
-              rules={{ required: true }}
-              placeholder="Numero de tarjeta"
-            />
-            <FormFeedback invalid={errors.numeroCard ? true : false}>
-              {errors.numeroCard && "Escribe el numero de la tarjeta"}
-            </FormFeedback>
-          </FormGroup>
-
-          <Label>Expireacion de tarjeta</Label>
-          <div className="row justify-content-lg-around">
-            <div className="col">
+      <div style={{ padding: 10 }}>
+        <FormGroup check>
+          <Label check>
+            <Input
+              type="radio"
+              name="metodo"
+              onChange={(e) => setMetodoPago(e.target.value)}
+              defaultChecked={true}
+              checked={MetodoPago === "Tarjeta" ? true : false}
+              value="Tarjeta"
+            />{" "}
+            Tarjeta de credito
+          </Label>
+        </FormGroup>
+        <FormGroup check>
+          <Label check>
+            <Input
+              type="radio"
+              name="metodo"
+              onChange={(e) => setMetodoPago(e.target.value)}
+              checked={MetodoPago === "Paypal" ? true : false}
+              value="Paypal"
+            />{" "}
+            Paypal
+          </Label>
+        </FormGroup>
+      </div>
+      {MetodoPago === "Tarjeta" ? (
+        <>
+          <Form onSubmit={handleSubmit(send)}>
+            <div style={{ backgroundColor: "#f8f8f9", padding: 20 }}>
               <FormGroup>
                 <Controller
-                  name="mesCard"
-                  type="select"
-                  control={control}
-                  render={({ name }) => (
+                  as={
                     <Input
-                      name={name}
-                      type="select"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setMes(Number(e.target.value))
-                      }
-                    >
-                      {meses.map((mes) => (
-                        <option value={mes.id}>{mes.mes}</option>
-                      ))}
-                    </Input>
-                  )}
-                />
-              </FormGroup>
-            </div>
-            <div className="col">
-              <FormGroup>
-                <Controller
+                      defaultValue={credito?.nombreCard}
+                      invalid={errors.nombreCard ? true : false}
+                    />
+                  }
                   type="text"
-                  name="yearCard"
+                  name="nombreCard"
                   control={control}
-                  render={({ name }) => (
-                    <Input
-                      name={name}
-                      type="select"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setAno(Number(e.target.value))
-                      }
-                    >
-                      {[
-                        1999,
-                        2000,
-                        2001,
-                        2002,
-                        2003,
-                        2004,
-                        2005,
-                        2006,
-                        2007,
-                        2008,
-                        2009,
-                        2010,
-                        2011,
-                        2012,
-                        2013,
-                        2014,
-                        2015,
-                        2016,
-                        2017,
-                        2018,
-                        2019,
-                        2020,
-                      ].map((ano) => (
-                        <option value={ano}>{ano}</option>
-                      ))}
-                    </Input>
-                  )}
-                />
-              </FormGroup>
-            </div>
-            <div className="col">
-              <FormGroup>
-                <Controller
-                  as={<Input invalid={errors.cvcNumber ? true : false} />}
-                  type="number"
-                  name="cvcNumber"
-                  control={control}
-                  placeholder="CVC"
-                  defaultValue={credito?.cvcNumber}
                   rules={{ required: true }}
+                  defaultValue={credito?.nombreCard}
+                  placeholder="Nombre de la tarjeta"
                 />
-                <FormFeedback invalid={errors.cvcNumber ? true : false}>
-                  {errors.cvcNumber && "CVC"}
+                <FormFeedback invalid={errors.nombreCard ? true : false}>
+                  {errors.nombreCard && "Escribe el nombre de la tarjeta"}
                 </FormFeedback>
               </FormGroup>
+
+              <FormGroup>
+                <Controller
+                  as={<Input invalid={errors.numeroCard ? true : false} />}
+                  type="number"
+                  name="numeroCard"
+                  control={control}
+                  defaultValue={credito?.numeroCard}
+                  rules={{ required: true }}
+                  placeholder="Numero de tarjeta"
+                />
+                <FormFeedback invalid={errors.numeroCard ? true : false}>
+                  {errors.numeroCard && "Escribe el numero de la tarjeta"}
+                </FormFeedback>
+              </FormGroup>
+
+              <Label>Expireacion de tarjeta</Label>
+              <div className="row justify-content-lg-around">
+                <div className="col">
+                  <FormGroup>
+                    <Controller
+                      name="mesCard"
+                      type="select"
+                      control={control}
+                      render={({ name }) => (
+                        <Input
+                          name={name}
+                          type="select"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setMes(Number(e.target.value))
+                          }
+                        >
+                          {meses.map((mes) => (
+                            <option value={mes.id}>{mes.mes}</option>
+                          ))}
+                        </Input>
+                      )}
+                    />
+                  </FormGroup>
+                </div>
+                <div className="col">
+                  <FormGroup>
+                    <Controller
+                      type="text"
+                      name="yearCard"
+                      control={control}
+                      render={({ name }) => (
+                        <Input
+                          name={name}
+                          type="select"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setAno(Number(e.target.value))
+                          }
+                        >
+                          {[
+                            1999,
+                            2000,
+                            2001,
+                            2002,
+                            2003,
+                            2004,
+                            2005,
+                            2006,
+                            2007,
+                            2008,
+                            2009,
+                            2010,
+                            2011,
+                            2012,
+                            2013,
+                            2014,
+                            2015,
+                            2016,
+                            2017,
+                            2018,
+                            2019,
+                            2020,
+                          ].map((ano) => (
+                            <option value={ano}>{ano}</option>
+                          ))}
+                        </Input>
+                      )}
+                    />
+                  </FormGroup>
+                </div>
+                <div className="col">
+                  <FormGroup>
+                    <Controller
+                      as={<Input invalid={errors.cvcNumber ? true : false} />}
+                      type="number"
+                      name="cvcNumber"
+                      control={control}
+                      placeholder="CVC"
+                      defaultValue={credito?.cvcNumber}
+                      rules={{ required: true }}
+                    />
+                    <FormFeedback invalid={errors.cvcNumber ? true : false}>
+                      {errors.cvcNumber && "CVC"}
+                    </FormFeedback>
+                  </FormGroup>
+                </div>
+              </div>
+
+              <Button type="submit" color="danger" block>
+                Realizar pago
+              </Button>
+
+              <br />
+              <br />
+
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    onChange={(e) => setIsProximoPago(e.target.checked)}
+                  />
+                  Guardar datos para proximos pagos.
+                </Label>
+              </FormGroup>
             </div>
-          </div>
+          </Form>
 
-          <Button type="submit" color="danger" block>
-            Realizar pago
-          </Button>
+          <br />
+
+          {isFedback && <Alert color={isFedback}>{feedback}</Alert>}
 
           <br />
           <br />
 
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(e) => setIsProximoPago(e.target.checked)}
-              />
-              Guardar datos para proximos pagos.
-            </Label>
-          </FormGroup>
-        </div>
-      </Form>
-
-      <br />
-
-      {isFedback && <Alert color={isFedback}>{feedback}</Alert>}
-
-      <br />
-      <br />
-
-      <DetallesPayment
-        title="Detalles del pedido"
-        content={`Pago de seguro social por el mes  de ${"Enero"} del ${2020}`}
-        monto={200}
-      />
+          <DetallesPayment
+            title="Detalles del pedido"
+            content={`Pago de seguro social por el mes  de ${"Enero"} del ${2020}`}
+            monto={5}
+          />
+        </>
+      ) : (
+        <form
+          action="https://www.paypal.com/cgi-bin/webscr"
+          method="post"
+          target="_top"
+        >
+          <input type="hidden" name="cmd" value="_s-xclick" />
+          <input type="hidden" name="hosted_button_id" value="8WL36TRP2ZZ74" />
+          <input
+            type="image"
+            src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif"
+            name="submit"
+            alt="PayPal - The safer, easier way to pay online!"
+          />
+          <img
+            alt=""
+            src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif"
+            width="1"
+            height="1"
+          />
+        </form>
+      )}
     </>
   );
 }
