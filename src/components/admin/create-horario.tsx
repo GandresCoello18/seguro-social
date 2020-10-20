@@ -92,7 +92,6 @@ export function CreateHorarioFrom() {
           >
             <option value="Mañana">Mañana</option>
             <option value="Tarde">Tarde</option>
-            <option value="Noche">Noche</option>
           </select>
           <FormFeedback invalid={errors.jornada ? true : false}>
             {errors.jornada && "Selecciona una jornada"}
@@ -111,8 +110,6 @@ export function CreateHorarioFrom() {
             <option value="Miercoles">Miercoles</option>
             <option value="Jueves">Jueves</option>
             <option value="Viernes">Viernes</option>
-            <option value="Sabado">Sabado</option>
-            <option value="Domingo">Domingo</option>
           </select>
           <FormFeedback invalid={errors.dia ? true : false}>
             {errors.dia && "Selecciona un dia"}

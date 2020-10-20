@@ -21,73 +21,63 @@ export function TableHorario() {
   return (
     <>
       <Nav tabs>
-        {[
-          "Lunes",
-          "Martes",
-          "Miercoles",
-          "Jueves",
-          "Viernes",
-          "Sabado",
-          "Domingo",
-        ].map((dia, index) => (
-          <NavItem>
-            <NavLink
-              className={activeTab === index ? "active" : ""}
-              onClick={() => {
-                toggle(index);
-              }}
-            >
-              {dia}
-            </NavLink>
-          </NavItem>
-        ))}
+        {["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"].map(
+          (dia, index) => (
+            <NavItem>
+              <NavLink
+                className={activeTab === index ? "active" : ""}
+                onClick={() => {
+                  toggle(index);
+                }}
+              >
+                {dia}
+              </NavLink>
+            </NavItem>
+          )
+        )}
       </Nav>
       <TabContent activeTab={activeTab}>
         <br />
-        {[
-          "Lunes",
-          "Martes",
-          "Miercoles",
-          "Jueves",
-          "Viernes",
-          "Sabado",
-          "Domingo",
-        ].map((dia, index) => (
-          <TabPane tabId={index}>
-            <ModalJornada dia={dia} />
-            <div className="row justify-content-md-around">
-              {HorarioReducer.map(
-                (horario: Horario_INT) =>
-                  horario.dia === dia && (
-                    <div className="col-12 col-md-5">
-                      <div className="single_candidates text-center">
-                        <div className="thumb">
-                          <img
-                            src={`${DOMAIN}/static/personal/${horario.imagen}`}
-                            alt={horario.nombres + " " + horario.apellido}
+        {["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"].map(
+          (dia, index) => (
+            <TabPane tabId={index}>
+              <ModalJornada dia={dia} />
+              <div className="row justify-content-md-around">
+                {HorarioReducer.map(
+                  (horario: Horario_INT) =>
+                    horario.dia === dia && (
+                      <div className="col-12 col-md-5">
+                        <div className="single_candidates text-center">
+                          <div className="thumb">
+                            <img
+                              src={`${DOMAIN}/static/personal/${horario.imagen}`}
+                              alt={horario.nombres + " " + horario.apellido}
+                            />
+                          </div>
+                          <a href="/">
+                            <h4>
+                              {horario.nombres} {horario.apellido}
+                            </h4>
+                          </a>
+                          <p>{horario.cargo}</p>
+                          <EliminarHorariorBtn
+                            id_horario={horario.id_horario}
                           />
                         </div>
-                        <a href="/">
-                          <h4>
-                            {horario.nombres} {horario.apellido}
-                          </h4>
-                        </a>
-                        <p>{horario.cargo}</p>
-                        <EliminarHorariorBtn id_horario={horario.id_horario} />
                       </div>
-                    </div>
-                  )
-              )}
-              {HorarioReducer.filter(
-                (horario: Horario_INT) => horario.dia === dia
-              ).length === 0 && (
-                <Alert color="info">
-                  No exiten personal asignado para ( {dia} )
-                </Alert>
-              )}
-            </div>
-          </TabPane>
-        ))}
+                    )
+                )}
+                {HorarioReducer.filter(
+                  (horario: Horario_INT) => horario.dia === dia
+                ).length === 0 && (
+                  <Alert color="info">
+                    No exiten personal asignado para ( {dia} )
+                  </Alert>
+                )}
+              </div>
+            </TabPane>
+          )
+        )}
       </TabContent>
     </>
   );

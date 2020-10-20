@@ -44,7 +44,7 @@ export function ModalJornada({ dia }: Props) {
         <ModalHeader toggle={toggleModal}>Jornadas</ModalHeader>
         <ModalBody>
           <Nav tabs>
-            {["Mañana", "Tarde", "Noche"].map((jornada, index) => (
+            {["Mañana", "Tarde"].map((jornada, index) => (
               <NavItem>
                 <NavLink
                   className={activeTab === index ? "active" : ""}
