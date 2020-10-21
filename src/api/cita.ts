@@ -22,6 +22,18 @@ export const crear_cita = async (data: Cita_INT) => {
   });
 };
 
+//// PETICION PUT
+
+export const update_state_cita = async (id_cita: string, estado: string) => {
+  return await axios({
+    method: "PUT",
+    url: `${DOMAIN}/api/cita/estado/${id_cita}`,
+    data: {
+      estado,
+    },
+  });
+};
+
 //// PETICION DELETE
 
 export const eliminar_cita = async (id_cita: string) => {

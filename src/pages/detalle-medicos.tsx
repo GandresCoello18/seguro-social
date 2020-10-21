@@ -57,6 +57,7 @@ export function DetalleMedicoPage() {
           <div className="row justify-content-center">
             <div className="col-12 col-md-2">
               <img
+                alt={detalleMedico[0].nombres + " " + detalleMedico[0].apellido}
                 src={`${DOMAIN}/static/personal/${detalleMedico[0].imagen}`}
               />
             </div>

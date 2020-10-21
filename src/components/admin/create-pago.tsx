@@ -4,7 +4,7 @@ import { Usuario_INT, ResponseAxios, Pago_INT } from "../../interface";
 import { useSelector, useDispatch } from "react-redux";
 import { SetPagos } from "../../redux/modulos/pagos";
 import { RootState, Dispatch } from "../../redux";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Button,
   Modal,
@@ -14,17 +14,12 @@ import {
   Form,
   FormGroup,
   Label,
-  Input,
   FormFeedback,
   Alert,
   Badge,
 } from "reactstrap";
 import { SpinnerLoader } from "../loader/spinner";
-import {
-  diferencia_de_meses,
-  fecha_actual,
-  incrementarMes,
-} from "../../hooks/fecha";
+import { diferencia_de_meses, incrementarMes } from "../../hooks/fecha";
 import moment from "moment";
 
 interface Pago {

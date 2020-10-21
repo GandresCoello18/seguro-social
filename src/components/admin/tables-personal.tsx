@@ -19,11 +19,12 @@ export function TablesPersonal({ limit }: Props) {
   );
 
   useEffect(() => {
-    setPersonal(PersonalReducer.personal);
-    if (!limit) {
-      limit = PersonalReducer.personal.length;
+    if (PersonalReducer.searchPersonal.length > 0) {
+      setPersonal(PersonalReducer.searchPersonal);
+    } else {
+      setPersonal(PersonalReducer.personal);
     }
-  }, [PersonalReducer, limit, personales]);
+  }, [PersonalReducer, personales]);
 
   return (
     <>

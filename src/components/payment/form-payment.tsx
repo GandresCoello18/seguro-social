@@ -82,7 +82,7 @@ export function FormPayment() {
     }
     let meses_atrasos = diferencia_de_meses(thisMes);
     setPagoAtrasado(Math.abs(meses_atrasos));
-  }, [MisPagos, MyUser, incrementarMes]);
+  }, [MisPagos, MyUser]);
 
   const send = async (data: Pago) => {
     setIsFedback("");

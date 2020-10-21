@@ -47,7 +47,7 @@ export function CreatePersonal() {
     setIsLoading(true);
     setIsFeeedback("");
 
-    const { nombres, apellido, cargo, imagen } = data;
+    const { nombres, apellido, cargo } = data;
     let img: any = document.getElementById("imagen");
     const form: FormData = new FormData();
     form.append("nombres", nombres);

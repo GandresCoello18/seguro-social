@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { Dispatch, RootState } from "../../redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SetSearchUser } from "../../redux/modulos/usuarios";
 import { Controller, useForm } from "react-hook-form";
-import { Form, FormGroup, Input, Button } from "reactstrap";
+import { Form, FormGroup, Input, Button, Alert } from "reactstrap";
+import { Usuario_INT } from "../../interface";
+import { SpinnerLoader } from "../loader/spinner";
 
 interface Search {
   tipo: string;
@@ -8,12 +13,43 @@ interface Search {
 }
 
 export function SearchClientes() {
+  const dispatch: Dispatch = useDispatch();
   const { control, handleSubmit } = useForm<Search>();
-  const [tipo, setTipo] = useState<string>("1");
+  const [isLoagin, setIsLoading] = useState<boolean>(false);
+  const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [tipo, setTipo] = useState<string>("cedula");
+
+  const Usuario: Array<Usuario_INT> = useSelector(
+    (state: RootState) => state.UsuarioReducer.usuarios
+  );
 
   const send = (data: Search): void => {
+    setIsLoading(true);
+    setIsSearch(false);
     data.tipo = tipo;
-    console.log(data);
+
+    const search = Usuario.filter((user) => {
+      switch (data.tipo) {
+        case "cedula":
+          return user.cedula.toString().indexOf(data.key) !== -1;
+        case "nombres-apellidos":
+          return (
+            user.nombres?.indexOf(data.key) !== -1 ||
+            user.apellidos?.indexOf(data.key) !== -1
+          );
+        case "email":
+          return user.email.indexOf(data.key) !== -1;
+      }
+    });
+
+    dispatch(SetSearchUser([...search]));
+
+    setIsLoading(false);
+    setIsSearch(true);
+
+    setTimeout(() => {
+      setIsSearch(false);
+    }, 2000);
   };
 
   return (
@@ -34,8 +70,11 @@ export function SearchClientes() {
                       setTipo(e.target.value)
                     }
                   >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="cedula">Cedula</option>
+                    <option value="nombres-apellidos">
+                      Nombres y Apellidos
+                    </option>
+                    <option value="email">Email</option>
                   </Input>
                 )}
               />
@@ -58,8 +97,15 @@ export function SearchClientes() {
               Buscar
             </Button>
           </div>
+          <div className="col-2">{isLoagin && <SpinnerLoader />}</div>
         </div>
       </Form>
+
+      <div className="row justify-content-center">
+        <div className="col-4">
+          {isSearch && <Alert color="info">Termino la busqueda.</Alert>}
+        </div>
+      </div>
     </>
   );
 }

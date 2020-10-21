@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { DeleteCita } from "../../api/fetch/cita";
-import { Button } from "reactstrap";
+import { Button, Tooltip } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Cita_INT, ResponseAxios } from "../../interface";
 import { SetCitas } from "../../redux/modulos/citas";
 import { RootState, Dispatch } from "../../redux";
+import { BsFillTrashFill } from "react-icons/bs";
 
 interface Props {
   id_cita: string;
 }
 
 export function EliminarCitaBtn({ id_cita }: Props) {
+  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
+  const toggle = () => setTooltipOpen(!tooltipOpen);
+
   const dispatch: Dispatch = useDispatch();
   const CitasReducer: Array<Cita_INT> = useSelector(
     (state: RootState) => state.CitasReducer.citas
@@ -32,9 +36,17 @@ export function EliminarCitaBtn({ id_cita }: Props) {
 
   return (
     <>
-      <Button color="danger" onClick={remove_cita}>
-        Eliminar
+      <Button id="TooltipCitaDelete" color="danger" onClick={remove_cita}>
+        <BsFillTrashFill />
       </Button>
+      <Tooltip
+        placement="right"
+        isOpen={tooltipOpen}
+        target="TooltipCitaDelete"
+        toggle={toggle}
+      >
+        ELiminar Cita
+      </Tooltip>
     </>
   );
 }

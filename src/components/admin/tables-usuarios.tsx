@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SpinnerLoader } from "../loader/spinner";
 import { Alert, Badge, Table } from "reactstrap";
 import moment from "moment";
@@ -17,6 +17,8 @@ interface Props {
 
 export function TablesUsuarios({ limit }: Props) {
   const [isReaload, setIsReload] = useState<boolean>(false);
+  const [user, setUser] = useState<Array<Usuario_INT>>([]);
+
   const UsuarioReducer = useSelector(
     (state: RootState) => state.UsuarioReducer
   );
@@ -24,6 +26,14 @@ export function TablesUsuarios({ limit }: Props) {
   const Pagos: Array<Pago_INT> = useSelector(
     (state: RootState) => state.PagosReducer.pagos
   );
+
+  useEffect(() => {
+    if (UsuarioReducer.searchUser.length > 0) {
+      setUser(UsuarioReducer.searchUser);
+    } else {
+      setUser(UsuarioReducer.usuarios);
+    }
+  }, [UsuarioReducer]);
 
   return (
     <>
@@ -67,7 +77,7 @@ export function TablesUsuarios({ limit }: Props) {
                 </thead>
                 <tbody>
                   {UsuarioReducer.loading && <SpinnerLoader />}
-                  {UsuarioReducer.usuarios
+                  {user
                     .filter(
                       (user: Usuario_INT) =>
                         user.id_user !== UsuarioReducer.myUser[0].id_user

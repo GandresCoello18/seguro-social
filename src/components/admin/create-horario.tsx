@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { Dispatch, RootState } from "../../redux";
 import { CreateHorario } from "../../api/fetch/horario";
 import { SetHorarios } from "../../redux/modulos/horarios";
@@ -25,7 +24,6 @@ interface Horario {
 export function CreateHorarioFrom() {
   const { errors, handleSubmit, register } = useForm<Horario>();
   const dispatch: Dispatch = useDispatch();
-  const history = useHistory<typeof useHistory>();
   const [feedback, setFeedback] = useState<string>("");
   const [isFeeedback, setIsFeedback] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);

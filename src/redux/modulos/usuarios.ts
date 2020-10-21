@@ -6,6 +6,7 @@ import { Usuario_INT } from "../../interface";
 
 export interface initialData {
   myUser: Array<Usuario_INT>;
+  searchUser: Array<Usuario_INT>;
   usuarios: Array<Usuario_INT>;
   loading: boolean;
   error: string;
@@ -13,6 +14,7 @@ export interface initialData {
 
 const initialData: initialData = {
   myUser: [],
+  searchUser: [],
   usuarios: [],
   loading: true,
   error: "",
@@ -22,6 +24,7 @@ const GET_MY_USER = "GET_MY_USER";
 const SET_MY_USER = "SET_MY_USER";
 const GET_USUARIOS = "GET_USUARIOS";
 const SET_USUARIOS = "SET_USUARIOS";
+const SET_SEARCH_USER = "SET_SEARCH_USER";
 
 /// REDUCER
 
@@ -35,6 +38,8 @@ export default function reducer(state = initialData, action: any) {
       return { ...state, usuarios: action.payload };
     case SET_MY_USER:
       return { ...state, myUser: action.payload };
+    case SET_SEARCH_USER:
+      return { ...state, searchUser: action.payload };
     default:
       return state;
   }
@@ -65,6 +70,15 @@ export const SetMyUser = (usuarios: Array<Usuario_INT>) => (
 ) => {
   dispatch({
     type: SET_MY_USER,
+    payload: usuarios,
+  });
+};
+
+export const SetSearchUser = (usuarios: Array<Usuario_INT>) => (
+  dispatch: Dispatch
+) => {
+  dispatch({
+    type: SET_SEARCH_USER,
     payload: usuarios,
   });
 };

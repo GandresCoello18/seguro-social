@@ -6,9 +6,21 @@ import { EliminarCitaBtn } from "./eliminar-cita";
 import { Cita_INT } from "../../interface";
 import { RootState } from "../../redux";
 import moment from "moment";
+import { UpdateStatusCita } from "./update-status-cita";
 
 export function TableCitas() {
   const CitasReducer = useSelector((state: RootState) => state.CitasReducer);
+
+  const validate_cita = (estado: string | undefined) => {
+    switch (estado) {
+      case "Reservado":
+        return "bg-warning text-white";
+      case "Atendido":
+        return "bg-success";
+      case "Cancelado":
+        return "bg-danger";
+    }
+  };
 
   return (
     <>
@@ -26,16 +38,9 @@ export function TableCitas() {
           </tr>
         </thead>
         <tbody>
-          {CitasReducer.loading && <SpinnerLoader />}
           {CitasReducer.citas.map((cita: Cita_INT) => (
             <tr key={cita.id_cita}>
-              <th
-                className={
-                  cita.status_cita === "Reservado"
-                    ? "bg-warning text-white"
-                    : "bg-success"
-                }
-              >
+              <th className={validate_cita(cita.status_cita)}>
                 {cita.status_cita}
               </th>
               <td>{cita.email}</td>
@@ -55,12 +60,18 @@ export function TableCitas() {
                 </Badge>
               </td>
               <td>
+                <UpdateStatusCita
+                  estado={cita.status_cita}
+                  id_cita={cita.id_cita}
+                />
+                &nbsp; &nbsp;
                 <EliminarCitaBtn id_cita={cita.id_cita} />
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
+      {CitasReducer.loading && <SpinnerLoader />}
       {CitasReducer.citas.length === 0 && (
         <Alert color="info">
           Por el momento no hay datos de citas para mostrar.

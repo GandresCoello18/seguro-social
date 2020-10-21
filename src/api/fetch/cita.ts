@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Respuesta, Cita_INT } from "../../interface";
-import { crear_cita, eliminar_cita } from "../cita";
+import { crear_cita, eliminar_cita, update_state_cita } from "../cita";
 
 let respuesta: Respuesta = { feeback: "", type: "EXITO" };
 
@@ -30,6 +30,28 @@ export const DeleteCita = async (id: string) => {
       } else {
         respuesta = {
           feeback: `OCURRIO UN ERROR AL ELIMINAR LA CITA`,
+          type: "ERROR",
+        };
+      }
+    }
+
+    return { axios, respuesta };
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const UpdateCita = async (id: string, estado: string) => {
+  try {
+    const axios: AxiosResponse = await update_state_cita(id, estado);
+    if (axios.data.feeback) {
+      respuesta = { feeback: axios.data.feeback, type: "ERROR" };
+    } else {
+      if (axios.data.update) {
+        respuesta = { feeback: `LA CITA FUE ACTUALIZADA`, type: "EXITO" };
+      } else {
+        respuesta = {
+          feeback: `OCURRIO UN ERROR AL ACTUALIZAR LA CITA`,
           type: "ERROR",
         };
       }

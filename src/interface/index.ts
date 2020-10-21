@@ -60,6 +60,8 @@ export interface Pago_INT {
   monto: string;
   cedula?: number;
   email?: string;
+  nombres?: string;
+  apellidos?: string;
   admin?: boolean;
 }
 
