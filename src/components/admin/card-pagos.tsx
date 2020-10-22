@@ -40,7 +40,7 @@ export function CardPagos({ pagos, limit }: Props) {
           <div className="single_catagory">
             {Cookies.get("isAdmin") === "true" && (
               <div className="text-center">
-                <strong>Cliente: </strong>
+                <strong>Afiliado: </strong>
                 <Badge color="secondary">{pago.email}</Badge>
               </div>
             )}

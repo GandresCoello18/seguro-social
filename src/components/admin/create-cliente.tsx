@@ -84,10 +84,10 @@ export function CreateCLient() {
   return (
     <>
       <Button color="primary" onClick={toggle}>
-        Crear nuevo cliente
+        Crear nuevo afiliado
       </Button>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Crear nuevo cliente</ModalHeader>
+        <ModalHeader toggle={toggle}>Crear nuevo afiliado</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(send)}>
             <FormGroup>

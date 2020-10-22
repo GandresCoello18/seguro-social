@@ -19,7 +19,7 @@ export function Portada() {
                     data-wow-duration="1s"
                     data-wow-delay=".2s"
                   >
-                    436 clientes
+                    436 Afiliados
                   </h5>
                   <h3
                     className="wow fadeInLeft"
