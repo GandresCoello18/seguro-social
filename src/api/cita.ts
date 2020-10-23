@@ -11,6 +11,15 @@ export const obtenerCitas = async () => {
   });
 };
 
+export const ValidarCitas = async (id_horario: string, fecha: string) => {
+  console.log(id_horario);
+  console.log(fecha);
+  return await axios({
+    method: "GET",
+    url: `${DOMAIN}/api/cita/validar_cita/${id_horario}/${fecha}`,
+  });
+};
+
 //// PETICION POST
 
 export const crear_cita = async (data: Cita_INT) => {

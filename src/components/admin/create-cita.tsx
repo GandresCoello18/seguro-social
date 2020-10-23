@@ -27,6 +27,7 @@ import {
 import { fecha_actual } from "../../hooks/fecha";
 import moment from "moment";
 import { getMondays } from "../../hooks/fecha";
+import { ValidarCitas } from "../../api/cita";
 
 interface Cita {
   id_horario: string;
@@ -48,6 +49,7 @@ export function CreateCita() {
   const [FechasCitas, setFechasCItas] = useState<Array<Date>>([]);
   const [HorasCitas, setHorasCitas] = useState<Array<string>>([]);
   const [SelectMes, setSelectMes] = useState<string>(fecha_actual());
+  const [isHorario, setHorario] = useState<string>("");
 
   const Horario: Array<Horario_INT> = useSelector(
     (state: RootState) => state.HorariosReducer.horarios
@@ -96,7 +98,6 @@ export function CreateCita() {
   };
 
   const updateMes = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     if (e.target.value[5] === "0") {
       const mes = e.target.value[6];
       const sub = e.target.value.substr(0, 5);
@@ -108,6 +109,7 @@ export function CreateCita() {
 
   const selectHorario = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const solo = Horario.find((item) => item.id_horario === e.target.value);
+    setHorario(e.target.value);
     setMedico(solo?.nombres + " " + solo?.apellido + " - " + solo?.cargo);
     let dia: number = 0;
     switch (solo?.dia) {
@@ -126,50 +128,28 @@ export function CreateCita() {
       case "Viernes":
         dia = 5;
         break;
-      case "Sabado":
-        dia = 6;
-        break;
-      case "Domingo":
-        dia = 0;
-        break;
     }
     setFechasCItas(getMondays(new Date(SelectMes), dia));
+  };
 
-    switch (solo?.jornada) {
-      case "Mañana":
-        setHorasCitas([
-          "07:00",
-          "07:30",
-          "08:00",
-          "08:30",
-          "09:00",
-          "09:30",
-          "10:00",
-          "10:30",
-          "11:00",
-          "11:30",
-          "12:00",
-        ]);
-        break;
-      case "Tarde":
-        setHorasCitas([
-          "13:00",
-          "13:30",
-          "14:00",
-          "14:30",
-          "15:00",
-          "15:30",
-          "16:00",
-          "16:30",
-          "17:00",
-          "17:30",
-          "18:00",
-        ]);
-        break;
-      case "Noche":
-        setHorasCitas(["19:00", "19:30", "20:00", "20:30", "21:00", "21:30"]);
-        break;
+  const selectFecha = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setIsLoading(true);
+    try {
+      const resHorasDisponibles = await ValidarCitas(
+        isHorario,
+        moment(e.target.value).format().substr(0, 10)
+      );
+      setHorasCitas(resHorasDisponibles.data);
+      if (resHorasDisponibles.data.length === 0) {
+        setIsFeedback("danger");
+        setFeedback("NO HAY HORAS DISPONIBLES PARA ESTA FECHA");
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsFeedback("danger");
+      setFeedback(error.message);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -249,6 +229,7 @@ export function CreateCita() {
                   </Label>
                   <select
                     className="form-control"
+                    onChange={selectFecha}
                     disabled={FechasCitas?.length === 0}
                     name="fecha_cita"
                     ref={register({ required: true })}
