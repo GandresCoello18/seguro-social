@@ -59,7 +59,7 @@ export function FormPayment() {
   const [feedback, setFeedback] = useState<string>("");
   const [credito, setCredito] = useState<Pago>();
   const [fecha_pago, setFecha_pago] = useState<Date | number>(0);
-  const [pagosAtrasado, setPagoAtrasado] = useState<number>(0);
+  const [pagosAtrasado, setPagoAtrasado] = useState<number | any>(0);
 
   useEffect(() => {
     if (localStorage.getItem("credito")) {
@@ -138,7 +138,7 @@ export function FormPayment() {
       <h2>
         Pagos atrasados:{" "}
         <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
-          {pagosAtrasado?.toFixed()}
+          {pagosAtrasado.toString().match(/^-?\d+(?:\.\d{0,0})?/)[0]}
         </Badge>
       </h2>
 

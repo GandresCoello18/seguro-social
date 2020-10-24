@@ -35,7 +35,7 @@ export function CreatePagoModal() {
   const [modal, setModal] = useState<boolean>(false);
   const [myIdUser, setMyIdUser] = useState<string>("");
   const [fecha_pago, setFecha_pago] = useState<Date | number>(0);
-  const [pagosAtrasado, setPagoAtrasado] = useState<number>(0);
+  const [pagosAtrasado, setPagoAtrasado] = useState<number | any>(0);
   const toggle = () => {
     setModal(!modal);
     setIsFeeedback("");
@@ -173,7 +173,11 @@ export function CreatePagoModal() {
                   <p style={{ fontSize: 20 }}>
                     Pagos Atrasados:{" "}
                     <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
-                      {pagosAtrasado?.toFixed()}
+                      {
+                        pagosAtrasado
+                          .toString()
+                          .match(/^-?\d+(?:\.\d{0,0})?/)[0]
+                      }
                     </Badge>
                   </p>
                 </>
