@@ -25,6 +25,7 @@ import moment from "moment";
 interface Pago {
   id_user: string;
   metodo: string;
+  monto: number;
 }
 
 export function CreatePagoModal() {
@@ -34,8 +35,10 @@ export function CreatePagoModal() {
   const [feedback, setFeedback] = useState<string>("");
   const [modal, setModal] = useState<boolean>(false);
   const [myIdUser, setMyIdUser] = useState<string>("");
+  const [SelectUser, setSelectUser] = useState<string>("");
   const [fecha_pago, setFecha_pago] = useState<Date | number>(0);
   const [pagosAtrasado, setPagoAtrasado] = useState<number | any>(0);
+  const [MontoEsperado, setMontoEsperado] = useState<number>(5);
   const toggle = () => {
     setModal(!modal);
     setIsFeeedback("");
@@ -46,7 +49,7 @@ export function CreatePagoModal() {
   );
   const PagosReducer = useSelector((state: RootState) => state.PagosReducer);
 
-  const { handleSubmit, errors, register } = useForm<Pago>();
+  const { handleSubmit, errors, register, control } = useForm<Pago>();
 
   useEffect(() => {
     if (UsuarioReducer.myUser.length > 0) {
@@ -58,26 +61,10 @@ export function CreatePagoModal() {
     setIsFeeedback("");
     setIsLoading(true);
 
-    /*let fecha_pago: string | Date | number;
-
-    const susPagos = PagosReducer.pagos
-      .reverse()
-      .filter((pago: Pago_INT) => pago.id_user === data.id_user);
-
-    if (susPagos.length === 0) {
-      fecha_pago = fecha_actual();
-    } else {
-      const ultimo_pago: string = susPagos[susPagos.length - 1].fecha_pago;
-      fecha_pago = new Date(ultimo_pago).setMonth(
-        new Date(ultimo_pago).getMonth() + 1
-      );
-      fecha_pago = new Date(fecha_pago);
-    }*/
-
     const resPayment: ResponseAxios = await CreatePago(
       moment(new Date(fecha_pago)).format(),
       data.metodo,
-      5,
+      data.monto,
       data.id_user,
       true
     );
@@ -97,6 +84,7 @@ export function CreatePagoModal() {
 
   const selectUser = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const select_user: string = event.target.value;
+    setSelectUser(select_user);
     const user: Usuario_INT = UsuarioReducer.usuarios.find(
       (user: Usuario_INT) => user.id_user === select_user
     );
@@ -118,7 +106,31 @@ export function CreatePagoModal() {
       setFecha_pago(date_pago);
     }
     let meses_atrasos = diferencia_de_meses(thisMes);
-    setPagoAtrasado(Math.abs(meses_atrasos));
+    setPagoAtrasado(Math.trunc(Math.abs(meses_atrasos)));
+
+    setMontoEsperado(5 * Math.trunc(Math.abs(meses_atrasos)));
+  };
+
+  const validarMonto = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+
+    if (value < 5) {
+      setIsLoading(true);
+      setIsFeeedback("danger");
+      setFeedback("El valor digitado es menor que el pago estimado.");
+    } else {
+      setIsLoading(false);
+      setIsFeeedback("");
+
+      if (value > MontoEsperado) {
+        setIsLoading(true);
+        setIsFeeedback("danger");
+        setFeedback("El valor digitado es mayor que el pago estimado.");
+      } else {
+        setIsLoading(false);
+        setIsFeeedback("");
+      }
+    }
   };
 
   return (
@@ -142,7 +154,7 @@ export function CreatePagoModal() {
                   .filter((user: Usuario_INT) => user.id_user !== myIdUser)
                   .map((user: Usuario_INT) => (
                     <option key={user.id_user} value={user.id_user}>
-                      {user.cedula} - {user.email}
+                      {user.cedula} - {user.nombres} - {user.apellidos}
                     </option>
                   ))}
               </select>
@@ -173,11 +185,7 @@ export function CreatePagoModal() {
                   <p style={{ fontSize: 20 }}>
                     Pagos Atrasados:{" "}
                     <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
-                      {
-                        pagosAtrasado
-                          .toString()
-                          .match(/^-?\d+(?:\.\d{0,0})?/)[0]
-                      }
+                      {pagosAtrasado}
                     </Badge>
                   </p>
                 </>
@@ -193,14 +201,31 @@ export function CreatePagoModal() {
               >
                 <option value="Efectivo">Efectivo</option>
                 <option value="Trasferencia">Trasferencia</option>
-                <option value="Tarjeta de credito">Tarjeta de credito</option>
               </select>
               <FormFeedback invalid={errors.metodo ? true : false}>
                 {errors.metodo && "Selecciona el metodo de pago"}
               </FormFeedback>
             </FormGroup>
 
-            <Button type="submit" color="info" block>
+            <FormGroup>
+              <Label for="cedula">Monto:</Label>
+              <input
+                type="number"
+                className="form-control"
+                onChange={validarMonto}
+                disabled={SelectUser === ""}
+                ref={register({ required: true })}
+                min={0}
+                name="monto"
+                defaultValue={MontoEsperado}
+                placeholder="Ingresa el monto"
+              />
+              <FormFeedback invalid={errors.monto ? true : false}>
+                {errors.monto && "Ingresa el monto"}
+              </FormFeedback>
+            </FormGroup>
+
+            <Button type="submit" disabled={isLoading} color="info" block>
               Guardar Pago
             </Button>
           </Form>

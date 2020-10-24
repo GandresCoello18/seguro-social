@@ -66,7 +66,10 @@ export function Portada() {
             requerimiento.
           </p>
           <ol>
-            <li>Vivir en el campo actualmente</li>
+            <li>
+              Ser obrero o trabajar de agricultura y ganaderia actualmente
+            </li>
+            <li>No contener RUT</li>
             <li>Datos personales como ( Nombres y apellidos, ect )</li>
             <li>Dirección o lugar de recidencia</li>
             <li>Copia de cedula y papel de votación</li>
