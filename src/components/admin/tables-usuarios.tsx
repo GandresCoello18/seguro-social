@@ -61,7 +61,7 @@ export function TablesUsuarios({ limit }: Props) {
                 Atrasado
               </Badge>
             </div>
-            <div className="col-12 col-md-10">
+            <div className="col-12">
               <Table striped bordered hover className="text-center">
                 <thead>
                   <tr>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CreateNewCita } from "../../api/fetch/cita";
 import { Controller, useForm } from "react-hook-form";
 import { Dispatch, RootState } from "../../redux";
@@ -12,6 +12,8 @@ import {
   Input,
   Label,
   Modal,
+  Row,
+  Col,
   ModalBody,
   ModalFooter,
   ModalHeader,
@@ -44,11 +46,14 @@ export function CreateCita() {
   const dispatch: Dispatch = useDispatch();
   const [feedback, setFeedback] = useState<string>("");
   const [isFeeedback, setIsFeedback] = useState<string>("");
+  const [dia, setDia] = useState<string>("");
+  const [jornada, setJornada] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [Medico, setMedico] = useState<string>("");
+  // const [Medico, setMedico] = useState<string>("");
   const [FechasCitas, setFechasCItas] = useState<Array<Date>>([]);
   const [HorasCitas, setHorasCitas] = useState<Array<string>>([]);
   const [SelectMes, setSelectMes] = useState<string>(fecha_actual());
+  const [HorarioMedico, setHorarioMedico] = useState<Array<Horario_INT>>([]);
   const [isHorario, setHorario] = useState<string>("");
 
   const Horario: Array<Horario_INT> = useSelector(
@@ -63,6 +68,18 @@ export function CreateCita() {
   const citas: Array<Cita_INT> = useSelector(
     (state: RootState) => state.CitasReducer.citas
   );
+
+  useEffect(() => {
+    if (jornada && dia) {
+      const horarioMedico = Horario.filter((item) => {
+        if (jornada + "-" + dia === item.jornada + "-" + item.dia) {
+          return item;
+        }
+      });
+
+      setHorarioMedico(horarioMedico);
+    }
+  }, [jornada, dia]);
 
   const send = async (data: Cita) => {
     setIsFeedback("");
@@ -107,12 +124,31 @@ export function CreateCita() {
     }
   };
 
-  const selectHorario = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const solo = Horario.find((item) => item.id_horario === e.target.value);
-    setHorario(e.target.value);
-    setMedico(solo?.nombres + " " + solo?.apellido + " - " + solo?.cargo);
+  const selecCargo = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const horarioMedico = Horario.filter((item) => {
+      if (
+        e.target.value === "Todos" &&
+        jornada + "-" + dia === item.jornada + "-" + item.dia
+      ) {
+        return Horario;
+      } else {
+        if (
+          e.target.value === item.cargo &&
+          jornada + "-" + dia === item.jornada + "-" + item.dia
+        ) {
+          return item;
+        }
+      }
+    });
+
+    setHorarioMedico(horarioMedico);
+  };
+
+  const selectDia = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDia(event.target.value);
+
     let dia: number = 0;
-    switch (solo?.dia) {
+    switch (event.target.value) {
       case "Lunes":
         dia = 1;
         break;
@@ -174,37 +210,75 @@ export function CreateCita() {
                   />
                 </FormGroup>
 
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <Label for="email">Dia:</Label>
+                      <select className="form-control" onChange={selectDia}>
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miercoles">Miercoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                      </select>
+                      <FormFeedback invalid={errors.id_horario ? true : false}>
+                        {errors.id_horario && "Seleccione el horario"}
+                      </FormFeedback>
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Label for="email">Jornada:</Label>
+                      <select
+                        className="form-control"
+                        onChange={(event) => setJornada(event.target.value)}
+                      >
+                        <option value="Mañana">Mañana</option>
+                        <option value="Tarde">Tarde</option>
+                      </select>
+                      <FormFeedback invalid={errors.id_horario ? true : false}>
+                        {errors.id_horario && "Seleccione el horario"}
+                      </FormFeedback>
+                    </FormGroup>
+                  </Col>
+                </Row>
+
                 <FormGroup>
-                  <Label for="email">Horario:</Label>
+                  <Label for="email">Cargo:</Label>
                   <select
-                    name="id_horario"
-                    onChange={selectHorario}
-                    ref={register({ required: true })}
                     className="form-control"
+                    onChange={selecCargo}
+                    disabled={HorarioMedico.length === 0}
                   >
-                    {Horario.map((horario) => (
-                      <option value={horario.id_horario}>
-                        ( Jornada ) {horario.jornada} - ( Dia ) {horario.dia}
-                      </option>
-                    ))}
+                    <option value="Todos">Todos</option>
+                    <option value="Medico general">Medico general</option>
+                    <option value="Odontologo">Odontologo</option>
                   </select>
-                  <FormFeedback invalid={errors.id_horario ? true : false}>
-                    {errors.id_horario && "Seleccione el horario"}
-                  </FormFeedback>
                 </FormGroup>
 
                 <FormGroup>
                   <Label for="email">Medico:</Label>
-                  <input
+                  <select
                     className="form-control"
-                    disabled={true}
-                    type="text"
-                    defaultValue={Medico}
-                  />
+                    onChange={(e) =>
+                      e.target.value !== "none" && setHorario(e.target.value)
+                    }
+                    ref={register({ required: true })}
+                    name="id_horario"
+                    disabled={HorarioMedico.length === 0}
+                  >
+                    <option value="none">Medicos.......</option>
+                    {HorarioMedico.map((medico) => (
+                      <option value={medico.id_horario}>
+                        {medico.nombres} - {medico.apellido} - ( {medico.cargo}{" "}
+                        )
+                      </option>
+                    ))}
+                  </select>
                 </FormGroup>
 
                 <FormGroup>
-                  <Label for="email">Usuario:</Label>
+                  <Label for="email">Afiliados:</Label>
                   <select
                     name="id_user"
                     ref={register({ required: true })}

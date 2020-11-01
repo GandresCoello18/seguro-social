@@ -20,7 +20,7 @@ export function validateStatus(
 
   let meses_atrasos = diferencia_de_meses(thisMes);
 
-  if (Math.abs(meses_atrasos) > 0) {
+  if (Math.trunc(Math.abs(meses_atrasos)) > 0) {
     return "bg-danger";
   } else {
     return "bg-success";
