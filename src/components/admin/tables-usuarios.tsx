@@ -80,7 +80,8 @@ export function TablesUsuarios({ limit }: Props) {
                   {user
                     .filter(
                       (user: Usuario_INT) =>
-                        user.id_user !== UsuarioReducer.myUser[0].id_user
+                        user.id_user !== UsuarioReducer.myUser[0].id_user &&
+                        user.email !== "anonimo@gmail.com"
                     )
                     .slice(0, limit)
                     .map((user: Usuario_INT) => (

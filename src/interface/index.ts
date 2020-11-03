@@ -79,12 +79,14 @@ export interface Horario_INT {
 export interface Cita_INT {
   readonly id_cita: string;
   id_horario: string;
-  id_user: string;
+  id_user?: string;
   email?: string;
   cedula?: number;
   status_cita?: string;
   fecha_cita: string;
   hora_cita: string;
+  isGrupo: boolean | number;
+  id_grupo?: number;
   id_personal?: number;
   jornada?: string;
   dia?: string;

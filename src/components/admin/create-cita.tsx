@@ -25,6 +25,7 @@ import {
   ResponseAxios,
   Usuario_INT,
   Cita_INT,
+  Grupo_afiliados_INT,
 } from "../../interface";
 import { fecha_actual } from "../../hooks/fecha";
 import moment from "moment";
@@ -33,13 +34,15 @@ import { ValidarCitas } from "../../api/cita";
 
 interface Cita {
   id_horario: string;
-  id_user: string;
+  id_user?: string;
   fecha_cita: string;
   hora_cita: string;
+  id_grupo?: number;
 }
 
 export function CreateCita() {
   const [modal, setModal] = useState<boolean>(false);
+  const [isGrupo, setIsGrupo] = useState<boolean>(false);
   const toggle = () => setModal(!modal);
 
   const { control, handleSubmit, register, errors } = useForm<Cita>();
@@ -69,6 +72,10 @@ export function CreateCita() {
     (state: RootState) => state.CitasReducer.citas
   );
 
+  const GrupoAfiliado: Array<Grupo_afiliados_INT> = useSelector(
+    (state: RootState) => state.GruposReducer.grupos
+  );
+
   useEffect(() => {
     if (jornada && dia) {
       const horarioMedico = Horario.filter((item) => {
@@ -85,7 +92,7 @@ export function CreateCita() {
     setIsFeedback("");
     setFeedback("");
     setIsLoading(true);
-    const { id_horario, id_user, fecha_cita, hora_cita } = data;
+    const { id_horario, id_user, fecha_cita, hora_cita, id_grupo } = data;
 
     const cita: Cita_INT = {
       id_cita: "",
@@ -93,7 +100,11 @@ export function CreateCita() {
       id_horario,
       fecha_cita: moment(fecha_cita).format().substr(0, 10),
       hora_cita,
+      isGrupo: isGrupo ? 1 : 0,
+      id_grupo,
     };
+
+    console.log(cita);
 
     const resCita: ResponseAxios = await CreateNewCita(cita);
 
@@ -278,24 +289,74 @@ export function CreateCita() {
                 </FormGroup>
 
                 <FormGroup>
-                  <Label for="email">Afiliados:</Label>
+                  <Label for="email">La cita es para ?:</Label>
                   <select
-                    name="id_user"
-                    ref={register({ required: true })}
                     className="form-control"
+                    onChange={(e) =>
+                      e.target.value !== "seleccione" &&
+                      (e.target.value === "oficial"
+                        ? setIsGrupo(false)
+                        : setIsGrupo(true))
+                    }
                   >
-                    {Usuario.filter(
-                      (user) => user.id_user !== MyUser[0].id_user
-                    ).map((user) => (
-                      <option value={user.id_user}>
-                        {user.cedula} - {user.email}
-                      </option>
-                    ))}
+                    <option value="seleccione">
+                      Selecciona para quien es la cita.....
+                    </option>
+                    <option value="oficial">AFILIADO OFICIAL</option>
+                    <option value="integrante">INTEGRANTE DEL AFILIADO</option>
                   </select>
                   <FormFeedback invalid={errors.id_user ? true : false}>
                     {errors.id_user && "Seleccione el usuario"}
                   </FormFeedback>
                 </FormGroup>
+
+                {!isGrupo ? (
+                  <FormGroup>
+                    <Label for="email">Afiliados:</Label>
+                    <select
+                      name="id_user"
+                      ref={register({ required: true })}
+                      className="form-control"
+                    >
+                      <option>Seleccione el afiliado.....</option>
+                      {Usuario.filter(
+                        (user) =>
+                          user.id_user !== MyUser[0].id_user &&
+                          user.nombres !== "anonimo"
+                      ).map((user) => (
+                        <option value={user.id_user}>
+                          {user.cedula} - {user.nombres} {user.apellidos}
+                        </option>
+                      ))}
+                    </select>
+                    <FormFeedback invalid={errors.id_user ? true : false}>
+                      {errors.id_user && "Seleccione el usuario"}
+                    </FormFeedback>
+                  </FormGroup>
+                ) : (
+                  <FormGroup>
+                    <Label for="email">Integrantes de los Afiliados:</Label>
+                    <select
+                      name="id_grupo"
+                      ref={register({ required: true })}
+                      className="form-control"
+                    >
+                      <option>Seleccione el integrante del afiliado</option>
+                      {GrupoAfiliado.filter(
+                        (user) =>
+                          user.id_user !== MyUser[0].id_user &&
+                          user.nombres !== "anonimo"
+                      ).map((user) => (
+                        <option value={user.id_grupo}>
+                          {user.tipo_familiar} - {user.nombres} {user.apellidos}
+                        </option>
+                      ))}
+                    </select>
+                    <FormFeedback invalid={errors.id_user ? true : false}>
+                      {errors.id_user && "Seleccione el integrante"}
+                    </FormFeedback>
+                  </FormGroup>
+                )}
 
                 <FormGroup>
                   <Label for="password">
