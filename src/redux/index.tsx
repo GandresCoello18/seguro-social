@@ -7,9 +7,10 @@ import { TokenLife } from "../api/fetch/login";
 import PersonalReducer, { getPersonal } from "./modulos/personal";
 import PagosReducer, { getMisPagos, getPagos } from "./modulos/pagos";
 import HorariosReducer, { getHorarios } from "./modulos/horarios";
-import CitasReducer, { getCitas } from "./modulos/citas";
+import CitasReducer, { getCitas, getMisCitas } from "./modulos/citas";
 import ContactosReducer, { getContactos } from "./modulos/contactos";
 import GruposReducer, { getGrupos } from "./modulos/grupos";
+import CitaGrupoReducer, { getCitasGrupo } from "./modulos/cita_grupos";
 
 const rootReducer = combineReducers({
   UsuarioReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   CitasReducer,
   ContactosReducer,
   GruposReducer,
+  CitaGrupoReducer,
 });
 
 declare global {
@@ -41,8 +43,10 @@ export default function generateStore() {
   getPagos()(store.dispatch);
   getHorarios()(store.dispatch);
   getCitas()(store.dispatch);
+  getMisCitas()(store.dispatch);
   getContactos()(store.dispatch);
   getGrupos()(store.dispatch);
+  getCitasGrupo()(store.dispatch);
 
   if (Cookies.get("access-token") !== undefined) {
     getMisPagos()(store.dispatch);

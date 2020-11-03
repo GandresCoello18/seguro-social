@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { obtenerCitas } from "../../api/cita";
+import { obtenerCitas, obtenerMisCitas } from "../../api/cita";
 import { Cita_INT } from "../../interface";
 
 /// CONSTANTES
@@ -61,7 +61,7 @@ export const SetCitas = (citas: Array<Cita_INT>) => (dispatch: Dispatch) => {
 //////  MIS CITAS
 
 export const getMisCitas = () => (dispatch: Dispatch) => {
-  obtenerCitas().then((res) => {
+  obtenerMisCitas().then((res) => {
     dispatch({
       type: GET_MIS_CITAS,
       payload: res.data,

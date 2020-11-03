@@ -9,9 +9,10 @@ import { BsFillTrashFill } from "react-icons/bs";
 
 interface Props {
   id_cita: string;
+  disable?: boolean;
 }
 
-export function EliminarCitaBtn({ id_cita }: Props) {
+export function EliminarCitaBtn({ id_cita, disable }: Props) {
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
   const toggle = () => setTooltipOpen(!tooltipOpen);
 
@@ -36,7 +37,12 @@ export function EliminarCitaBtn({ id_cita }: Props) {
 
   return (
     <>
-      <Button id="TooltipCitaDelete" color="danger" onClick={remove_cita}>
+      <Button
+        id="TooltipCitaDelete"
+        disabled={disable}
+        color="danger"
+        onClick={remove_cita}
+      >
         <BsFillTrashFill />
       </Button>
       <Tooltip

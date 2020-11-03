@@ -20,6 +20,7 @@ import {
 } from "reactstrap";
 import { SpinnerLoader } from "../loader/spinner";
 import { SetCitas } from "../../redux/modulos/citas";
+import { SetCitasGrupo } from "../../redux/modulos/cita_grupos";
 import {
   Horario_INT,
   ResponseAxios,
@@ -40,7 +41,11 @@ interface Cita {
   id_grupo?: number;
 }
 
-export function CreateCita() {
+interface Props {
+  isMisCitas?: boolean;
+}
+
+export function CreateCita({ isMisCitas }: Props) {
   const [modal, setModal] = useState<boolean>(false);
   const [isGrupo, setIsGrupo] = useState<boolean>(false);
   const toggle = () => setModal(!modal);
@@ -96,7 +101,8 @@ export function CreateCita() {
 
     const cita: Cita_INT = {
       id_cita: "",
-      id_user,
+      id_user:
+        isMisCitas && id_grupo == undefined ? MyUser[0].id_user : id_user,
       id_horario,
       fecha_cita: moment(fecha_cita).format().substr(0, 10),
       hora_cita,
@@ -118,11 +124,14 @@ export function CreateCita() {
           "LL"
         )} a las ${hora_cita}`
       );
-      dispatch(SetCitas([...citas, ...resCita.axios.data]));
+      isGrupo
+        ? dispatch(SetCitasGrupo([...citas, ...resCita.axios.data]))
+        : dispatch(SetCitas([...citas, ...resCita.axios.data]));
       setModal(false);
     }
 
     setIsLoading(false);
+    window.location.reload();
   };
 
   const updateMes = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -311,26 +320,51 @@ export function CreateCita() {
                 </FormGroup>
 
                 {!isGrupo ? (
+                  !isMisCitas && (
+                    <FormGroup>
+                      <Label for="email">Afiliados:</Label>
+                      <select
+                        name="id_user"
+                        ref={register({ required: true })}
+                        className="form-control"
+                      >
+                        <option>Seleccione el afiliado.....</option>
+                        {Usuario.filter(
+                          (user) =>
+                            user.id_user !== MyUser[0].id_user &&
+                            user.nombres !== "anonimo"
+                        ).map((user) => (
+                          <option value={user.id_user}>
+                            {user.cedula} - {user.nombres} {user.apellidos}
+                          </option>
+                        ))}
+                      </select>
+                      <FormFeedback invalid={errors.id_user ? true : false}>
+                        {errors.id_user && "Seleccione el usuario"}
+                      </FormFeedback>
+                    </FormGroup>
+                  )
+                ) : isMisCitas ? (
                   <FormGroup>
-                    <Label for="email">Afiliados:</Label>
+                    <Label for="email">Integrantes de los Afiliados:</Label>
                     <select
-                      name="id_user"
+                      name="id_grupo"
                       ref={register({ required: true })}
                       className="form-control"
                     >
-                      <option>Seleccione el afiliado.....</option>
-                      {Usuario.filter(
+                      <option>Seleccione el integrante del afiliado</option>
+                      {GrupoAfiliado.filter(
                         (user) =>
-                          user.id_user !== MyUser[0].id_user &&
+                          user.id_user === MyUser[0].id_user &&
                           user.nombres !== "anonimo"
                       ).map((user) => (
-                        <option value={user.id_user}>
-                          {user.cedula} - {user.nombres} {user.apellidos}
+                        <option value={user.id_grupo}>
+                          {user.tipo_familiar} - {user.nombres} {user.apellidos}
                         </option>
                       ))}
                     </select>
                     <FormFeedback invalid={errors.id_user ? true : false}>
-                      {errors.id_user && "Seleccione el usuario"}
+                      {errors.id_user && "Seleccione el integrante"}
                     </FormFeedback>
                   </FormGroup>
                 ) : (

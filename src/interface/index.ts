@@ -81,6 +81,7 @@ export interface Cita_INT {
   id_horario: string;
   id_user?: string;
   email?: string;
+  nombre_afiliado?: string;
   cedula?: number;
   status_cita?: string;
   fecha_cita: string;
@@ -94,4 +95,28 @@ export interface Cita_INT {
   apellido?: string;
   cargo?: string;
   imagen?: string;
+}
+
+export interface Cita_Grupo_INT {
+  id_cita: string;
+  id_horario: string;
+  id_user: string;
+  status_cita: string;
+  fecha_cita: string;
+  hora_cita: string;
+  isGrupo: number;
+  id_grupo: number;
+  tipo_familiar: string;
+  nombre_grupo_afiliado: string;
+  apellidos: string;
+  //fecha_nacimiento: string,
+  status_grupo: string;
+  sexo: string;
+  id_personal: number;
+  jornada: string;
+  dia: string;
+  nombres: string;
+  apellido: string;
+  cargo: string;
+  imagen: string;
 }

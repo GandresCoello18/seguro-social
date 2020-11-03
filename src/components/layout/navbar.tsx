@@ -57,10 +57,10 @@ export function NavBar({ title }: Props) {
                           {MyUser.length > 0 && (
                             <>
                               <li>
-                                <Link to="/mis-pagos">Mis pagos</Link>
+                                <Link to="/mis-pagos">Mis Pagos</Link>
                               </li>
                               <li>
-                                <Link to="/payment">Proximo pago</Link>
+                                <Link to="/mis-citas">Mis Citas</Link>
                               </li>
                               <li>
                                 <a href="#" onClick={() => setVisible(true)}>

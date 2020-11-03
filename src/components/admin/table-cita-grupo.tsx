@@ -3,13 +3,15 @@ import { useSelector } from "react-redux";
 import { SpinnerLoader } from "../loader/spinner";
 import { Badge, Alert, Table } from "reactstrap";
 import { EliminarCitaBtn } from "./eliminar-cita";
-import { Cita_INT } from "../../interface";
+import { Cita_Grupo_INT } from "../../interface";
 import { RootState } from "../../redux";
 import moment from "moment";
 import { UpdateStatusCita } from "./update-status-cita";
 
-export function TableCitas() {
-  const CitasReducer = useSelector((state: RootState) => state.CitasReducer);
+export function TableCitasGrupos() {
+  const CitasGrupoReducer = useSelector(
+    (state: RootState) => state.CitaGrupoReducer
+  );
 
   const validate_cita = (estado: string | undefined) => {
     switch (estado) {
@@ -28,8 +30,8 @@ export function TableCitas() {
         <thead>
           <tr>
             <th>Estado</th>
-            <th>Email</th>
-            <th>Cedula</th>
+            <th>Integrante</th>
+            <th>Tipo</th>
             <th>Medico</th>
             <th>Fecha</th>
             <th>Hora</th>
@@ -38,13 +40,15 @@ export function TableCitas() {
           </tr>
         </thead>
         <tbody>
-          {CitasReducer.citas.map((cita: Cita_INT) => (
+          {CitasGrupoReducer.citasGrupo.map((cita: Cita_Grupo_INT) => (
             <tr key={cita.id_cita}>
               <th className={validate_cita(cita.status_cita)}>
                 {cita.status_cita}
               </th>
-              <td>{cita.email}</td>
-              <td>{cita.cedula}</td>
+              <td>
+                {cita.nombre_grupo_afiliado} {cita.apellidos}
+              </td>
+              <td>{cita.tipo_familiar}</td>
               <th style={{ color: "green" }}>
                 {cita.nombres} {cita.apellido}
               </th>
@@ -71,8 +75,8 @@ export function TableCitas() {
           ))}
         </tbody>
       </Table>
-      {CitasReducer.loading && <SpinnerLoader />}
-      {CitasReducer.citas.length === 0 && (
+      {CitasGrupoReducer.loading && <SpinnerLoader />}
+      {CitasGrupoReducer.citasGrupo.length === 0 && (
         <Alert color="info">
           Por el momento no hay datos de citas para mostrar.
         </Alert>

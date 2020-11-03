@@ -5,6 +5,7 @@ import { PrivateRoute } from "./private";
 import { HomePage } from "../pages/home";
 import { NotFound } from "../pages/not-found";
 import { MisPagos } from "../pages/mis-pagos";
+import { MisCitas } from "../pages/mis-citas";
 import { ContactoPage } from "../pages/contacto";
 import { MedicosPage } from "../pages/medicos";
 import { PaymentPage } from "../pages/paymanet";
@@ -41,6 +42,7 @@ export default function Routes() {
           <PublicRoute path="/contacto" component={ContactoPage} />
           <PrivateRoute path="/payment" component={PaymentPage} />
           <PrivateRoute path="/mis-pagos" component={MisPagos} />
+          <PrivateRoute path="/mis-citas" component={MisCitas} />
           <Route path="/factura/:id_pago" component={FacturaPage} />
           <Route exact path="/404" component={NotFound} />
           <Route exact path="/" component={HomePage} />

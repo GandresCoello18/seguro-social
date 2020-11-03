@@ -12,11 +12,24 @@ export const obtenerCitas = async () => {
 };
 
 export const ValidarCitas = async (id_horario: string, fecha: string) => {
-  console.log(id_horario);
-  console.log(fecha);
   return await axios({
     method: "GET",
     url: `${DOMAIN}/api/cita/validar_cita/${id_horario}/${fecha}`,
+  });
+};
+
+export const obtenerCitasGrupo = async () => {
+  return await axios({
+    method: "GET",
+    url: `${DOMAIN}/api/cita/cita_grupo`,
+  });
+};
+
+export const obtenerMisCitas = async () => {
+  return await axios({
+    method: "GET",
+    url: `${DOMAIN}/api/cita/mis-citas/consulta`,
+    headers: { "access-token": TOKEN },
   });
 };
 
