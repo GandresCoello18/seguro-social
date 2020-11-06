@@ -7,7 +7,7 @@ import { CreateCita } from "../components/admin/create-cita";
 import { Footer } from "../components/layout/fotter";
 import { Alert, Badge, Table } from "reactstrap";
 import moment from "moment";
-import { Cita_INT } from "../interface";
+import { Cita_Grupo_INT, Cita_INT } from "../interface";
 import { EliminarCitaBtn } from "../components/admin/eliminar-cita";
 
 export function MisCitas() {
@@ -100,6 +100,78 @@ export function MisCitas() {
               </Table>
               {MisCitas.MisCitas.length === 0 && (
                 <Alert color="info">No tienes citas por el momneto</Alert>
+              )}
+              {MisCitas.loading && <SpinnerLoader />}
+            </div>
+          </div>
+
+          <br />
+          <hr />
+          <br />
+
+          <div className="row">
+            <div className="col-8">
+              <div className="section_title mb-40">
+                <h3>Historial de citas de mis intergantes</h3>
+              </div>
+            </div>
+            <div className="col-2">
+              <CreateCita isMisCitas={true} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-12">
+              <Table bordered hover className="text-center">
+                <thead>
+                  <tr>
+                    <th>Estado</th>
+                    <th>Familiar</th>
+                    <th>Integrante</th>
+                    <th>Medico</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Jornada</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MisCitas.MisCitasGrupo.map((cita: Cita_Grupo_INT) => (
+                    <tr key={cita.id_cita}>
+                      <th className={validate_cita(cita.status_cita)}>
+                        {cita.status_cita}
+                      </th>
+                      <td>{cita.tipo_familiar}</td>
+                      <td>
+                        {cita.nombres} {cita.apellidos}
+                      </td>
+                      <th style={{ color: "green" }}>
+                        {cita.nombres} {cita.apellido}
+                      </th>
+                      <td>{moment(cita.fecha_cita).format("LL")}</td>
+                      <td>
+                        <Badge color="secondary" style={{ fontSize: 17 }}>
+                          {cita.hora_cita}
+                        </Badge>
+                      </td>
+                      <td>
+                        <Badge color="secondary" style={{ fontSize: 17 }}>
+                          {cita.jornada}
+                        </Badge>
+                      </td>
+                      <td>
+                        <EliminarCitaBtn
+                          disable={cita.status_cita !== "Reservado"}
+                          id_cita={cita.id_cita}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              {MisCitas.MisCitas.length === 0 && (
+                <Alert color="info">
+                  No tienes citas de integrantes por el momneto
+                </Alert>
               )}
               {MisCitas.loading && <SpinnerLoader />}
             </div>
