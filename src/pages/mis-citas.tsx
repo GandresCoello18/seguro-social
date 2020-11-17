@@ -115,9 +115,6 @@ export function MisCitas() {
                 <h3>Historial de citas de mis intergantes</h3>
               </div>
             </div>
-            <div className="col-2">
-              <CreateCita isMisCitas={true} />
-            </div>
           </div>
           <div className="row">
             <div className="col-12">
@@ -142,7 +139,7 @@ export function MisCitas() {
                       </th>
                       <td>{cita.tipo_familiar}</td>
                       <td>
-                        {cita.nombres} {cita.apellidos}
+                        {cita.nombre_grupo_afiliado} {cita.apellidos}
                       </td>
                       <th style={{ color: "green" }}>
                         {cita.nombres} {cita.apellido}

@@ -49,7 +49,7 @@ export function CreatePagoModal() {
   );
   const PagosReducer = useSelector((state: RootState) => state.PagosReducer);
 
-  const { handleSubmit, errors, register, control } = useForm<Pago>();
+  const { handleSubmit, errors, register } = useForm<Pago>();
 
   useEffect(() => {
     if (UsuarioReducer.myUser.length > 0) {
