@@ -67,6 +67,7 @@ export function VerIntegrantes({ id_afiliado, isReload }: Props) {
           <Table striped bordered hover className="text-center">
             <thead>
               <tr>
+                <th>Cedula</th>
                 <th>Nombres</th>
                 <th>Apellido</th>
                 <th>Familiar</th>
@@ -78,6 +79,7 @@ export function VerIntegrantes({ id_afiliado, isReload }: Props) {
             <tbody>
               {integrantes.map((integrante) => (
                 <tr key={integrante.id_grupo}>
+                  <td>1207345768</td>
                   <td>{integrante.nombres}</td>
                   <td>{integrante.apellidos}</td>
                   <td>{integrante.tipo_familiar}</td>

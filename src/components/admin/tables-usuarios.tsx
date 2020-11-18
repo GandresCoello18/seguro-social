@@ -18,6 +18,7 @@ interface Props {
 export function TablesUsuarios({ limit }: Props) {
   const [isReaload, setIsReload] = useState<boolean>(false);
   const [user, setUser] = useState<Array<Usuario_INT>>([]);
+  const [Isloading, setIsloading] = useState<boolean>(false);
 
   const UsuarioReducer = useSelector(
     (state: RootState) => state.UsuarioReducer
@@ -28,15 +29,18 @@ export function TablesUsuarios({ limit }: Props) {
   );
 
   useEffect(() => {
+    setIsloading(true);
     if (UsuarioReducer.searchUser.length > 0) {
       setUser(UsuarioReducer.searchUser);
     } else {
       setUser(UsuarioReducer.usuarios);
     }
-  }, [UsuarioReducer]);
+    user.length && setIsloading(false);
+  }, [UsuarioReducer, user]);
 
   return (
     <>
+      {Isloading && <SpinnerLoader />}
       {UsuarioReducer.myUser.length > 0 && (
         <div className="container-fluid">
           <div className="row justify-content-center mt-5">

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ResponseAxios, Grupo_afiliados_INT } from "../../interface";
 import { SetGrupos } from "../../redux/modulos/grupos";
 import { RootState, Dispatch } from "../../redux";
+import { BsXSquareFill } from "react-icons/bs";
 
 interface Props {
   id_grupo: number;
@@ -33,7 +34,7 @@ export function EliminarGrupoBtn({ id_grupo }: Props) {
   return (
     <>
       <Button color="danger" onClick={remover_horario}>
-        Remover
+        <BsXSquareFill />
       </Button>
     </>
   );
