@@ -15,7 +15,7 @@ interface Search {
 export function SearchPersonal() {
   const dispatch: Dispatch = useDispatch();
   const { control, handleSubmit } = useForm<Search>();
-  const [tipo, setTipo] = useState<string>("nombres");
+  const [tipo, setTipo] = useState<string>("cedula");
   const [isLoagin, setIsLoading] = useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
 
@@ -30,6 +30,8 @@ export function SearchPersonal() {
 
     const search = Personal.filter((personal) => {
       switch (data.tipo) {
+        case "cedula":
+          return personal.cedula_p.toString().indexOf(data.key) !== -1;
         case "nombres":
           return personal.nombres.indexOf(data.key) !== -1;
         case "apellido":
@@ -65,6 +67,7 @@ export function SearchPersonal() {
                       setTipo(e.target.value)
                     }
                   >
+                    <option value="cedula">cedula</option>
                     <option value="nombres">nombre</option>
                     <option value="apellido">apellido</option>
                     <option value="cargo">cargo</option>

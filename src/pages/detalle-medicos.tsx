@@ -124,8 +124,8 @@ export function DetalleMedicoPage() {
               </h2>
               <ul>
                 <li>Babahoyo 10 de agosto, centro.</li>
-                <li>0992239138</li>
-                <li>anonimo@gmail.com</li>
+                <li>{detalleMedico[0].telefono_p}</li>
+                <li>{detalleMedico[0].nombres}19@gmail.com</li>
               </ul>
             </div>
             <div className="col-12 col-md-4">

@@ -25,6 +25,8 @@ interface Personal {
   apellido: string;
   cargo: string;
   imagen: string;
+  cedula: string;
+  telefono: string;
 }
 
 export function CreatePersonal() {
@@ -47,13 +49,15 @@ export function CreatePersonal() {
     setIsLoading(true);
     setIsFeeedback("");
 
-    const { nombres, apellido, cargo } = data;
+    const { nombres, apellido, cargo, cedula, telefono } = data;
     let img: any = document.getElementById("imagen");
     const form: FormData = new FormData();
     form.append("nombres", nombres);
     form.append("apellido", apellido);
     form.append("cargo", cargo);
     form.append("imagen", img.files[0]);
+    form.append("cedula_p", cedula);
+    form.append("telefono_p", telefono);
 
     const resPersonal: ResponseAxios = await CreatePersona(form);
 
@@ -78,6 +82,38 @@ export function CreatePersonal() {
         <ModalHeader toggle={toggle}>Crear nuevo Medico</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(send)}>
+            <FormGroup>
+              <Label for="cedula">Cedula:</Label>
+              <Controller
+                as={<Input invalid={errors.cedula ? true : false} />}
+                type="number"
+                name="cedula"
+                min={0}
+                control={control}
+                rules={{ required: true }}
+                placeholder="Ingrese su numero de cedula"
+              />
+              <FormFeedback invalid={errors.cedula ? true : false}>
+                {errors.cedula && "Ingrese su numero de cedula"}
+              </FormFeedback>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="cedula">Telefono:</Label>
+              <Controller
+                as={<Input invalid={errors.telefono ? true : false} />}
+                type="number"
+                name="telefono"
+                min={0}
+                control={control}
+                rules={{ required: true }}
+                placeholder="Ingrese numero telefonico"
+              />
+              <FormFeedback invalid={errors.telefono ? true : false}>
+                {errors.telefono && "Ingrese numero telefonico"}
+              </FormFeedback>
+            </FormGroup>
+
             <FormGroup>
               <Label for="cedula">Nombres:</Label>
               <Controller

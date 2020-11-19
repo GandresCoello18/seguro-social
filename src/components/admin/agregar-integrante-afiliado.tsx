@@ -36,6 +36,7 @@ interface Integrante {
   sexo: string;
   fecha_nacimiento: string;
   tipo_familia: string;
+  cedula: number;
 }
 
 export function AgregarIntegranteAfiliado({
@@ -64,7 +65,14 @@ export function AgregarIntegranteAfiliado({
   const send = async (data: Integrante) => {
     setIsLoading(true);
     setIsFeedback("");
-    const { nombres, apellidos, sexo, fecha_nacimiento, tipo_familia } = data;
+    const {
+      nombres,
+      apellidos,
+      sexo,
+      fecha_nacimiento,
+      tipo_familia,
+      cedula,
+    } = data;
 
     if (
       tipo_familia === "Hijos" &&
@@ -81,6 +89,7 @@ export function AgregarIntegranteAfiliado({
         sexo,
         fecha_nacimiento,
         tipo_familiar: tipo_familia,
+        cedula_g: cedula,
       };
 
       const resGrupo: ResponseAxios = await IntegrarAlGrupo(grupo);
@@ -123,6 +132,22 @@ export function AgregarIntegranteAfiliado({
         </ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(send)}>
+            <FormGroup>
+              <Label for="Cedula">Cedula:</Label>
+              <Controller
+                as={<Input invalid={errors.cedula ? true : false} />}
+                type="number"
+                name="cedula"
+                min={0}
+                control={control}
+                rules={{ required: true }}
+                placeholder="Ingresa tu numero de identidad"
+              />
+              <FormFeedback invalid={errors.cedula ? true : false}>
+                {errors.cedula && "Ingresa tu numero de indentidad"}
+              </FormFeedback>
+            </FormGroup>
+
             <FormGroup>
               <Label for="nombres">Nombres:</Label>
               <Controller

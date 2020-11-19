@@ -23,6 +23,7 @@ export interface Grupo_afiliados_INT {
   sexo: string;
   fecha_nacimiento: string;
   status_grupo?: string;
+  cedula_g: number;
 }
 
 export interface Personal_IMT {
@@ -31,6 +32,8 @@ export interface Personal_IMT {
   apellido: string;
   cargo: string;
   imagen: string;
+  cedula_p: number;
+  telefono_p: number;
 }
 
 export interface Respuesta {

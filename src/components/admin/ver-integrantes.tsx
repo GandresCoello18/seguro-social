@@ -79,7 +79,7 @@ export function VerIntegrantes({ id_afiliado, isReload }: Props) {
             <tbody>
               {integrantes.map((integrante) => (
                 <tr key={integrante.id_grupo}>
-                  <td>1207345768</td>
+                  <td>{integrante.cedula_g}</td>
                   <td>{integrante.nombres}</td>
                   <td>{integrante.apellidos}</td>
                   <td>{integrante.tipo_familiar}</td>
