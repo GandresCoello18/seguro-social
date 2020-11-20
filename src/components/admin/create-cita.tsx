@@ -91,7 +91,7 @@ export function CreateCita({ isMisCitas }: Props) {
 
       setHorarioMedico(horarioMedico);
     }
-  }, [jornada, dia]);
+  }, [jornada, dia, Horario]);
 
   const send = async (data: Cita) => {
     setIsFeedback("");
@@ -109,8 +109,6 @@ export function CreateCita({ isMisCitas }: Props) {
       isGrupo: isGrupo ? 1 : 0,
       id_grupo,
     };
-
-    console.log(cita);
 
     const resCita: ResponseAxios = await CreateNewCita(cita);
 
@@ -145,6 +143,7 @@ export function CreateCita({ isMisCitas }: Props) {
   };
 
   const selecCargo = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    // eslint-disable-next-line array-callback-return
     const horarioMedico = Horario.filter((item) => {
       if (
         e.target.value === "Todos" &&
@@ -153,7 +152,7 @@ export function CreateCita({ isMisCitas }: Props) {
         return Horario;
       } else {
         if (
-          e.target.value === item.cargo &&
+          e.target.value.indexOf(`${item.cargo}`) !== -1 &&
           jornada + "-" + dia === item.jornada + "-" + item.dia
         ) {
           return item;
@@ -165,27 +164,29 @@ export function CreateCita({ isMisCitas }: Props) {
   };
 
   const selectDia = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDia(event.target.value);
+    if (event.target.value !== "select") {
+      setDia(event.target.value);
 
-    let dia: number = 0;
-    switch (event.target.value) {
-      case "Lunes":
-        dia = 1;
-        break;
-      case "Martes":
-        dia = 2;
-        break;
-      case "Miercoles":
-        dia = 3;
-        break;
-      case "Jueves":
-        dia = 4;
-        break;
-      case "Viernes":
-        dia = 5;
-        break;
+      let dia: number = 0;
+      switch (event.target.value) {
+        case "Lunes":
+          dia = 1;
+          break;
+        case "Martes":
+          dia = 2;
+          break;
+        case "Miercoles":
+          dia = 3;
+          break;
+        case "Jueves":
+          dia = 4;
+          break;
+        case "Viernes":
+          dia = 5;
+          break;
+      }
+      setFechasCItas(getMondays(new Date(SelectMes), dia));
     }
-    setFechasCItas(getMondays(new Date(SelectMes), dia));
   };
 
   const selectFecha = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -235,6 +236,9 @@ export function CreateCita({ isMisCitas }: Props) {
                     <FormGroup>
                       <Label for="email">Dia:</Label>
                       <select className="form-control" onChange={selectDia}>
+                        <option value="select" disabled={false}>
+                          Select.....
+                        </option>
                         <option value="Lunes">Lunes</option>
                         <option value="Martes">Martes</option>
                         <option value="Miercoles">Miercoles</option>
@@ -251,8 +255,14 @@ export function CreateCita({ isMisCitas }: Props) {
                       <Label for="email">Jornada:</Label>
                       <select
                         className="form-control"
-                        onChange={(event) => setJornada(event.target.value)}
+                        onChange={(event) =>
+                          event.target.value !== "select" &&
+                          setJornada(event.target.value)
+                        }
                       >
+                        <option value="select" disabled={false}>
+                          Select....
+                        </option>
                         <option value="Mañana">Mañana</option>
                         <option value="Tarde">Tarde</option>
                       </select>
