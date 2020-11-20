@@ -66,7 +66,7 @@ export function SearchPagos() {
                     }
                   >
                     <option value="metodo">Metodo</option>
-                    <option value="cliente">Cliente</option>
+                    <option value="cliente">Afiliado</option>
                     <option value="fecha_pago">Fecha Pago</option>
                   </Input>
                 )}

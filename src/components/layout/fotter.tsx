@@ -61,7 +61,7 @@ export function Footer() {
                       <a href="/contacto">Contacto</a>
                     </li>
                     <li>
-                      <a href="/clientes">Clientes</a>
+                      <a href="/clientes">Afiliados</a>
                     </li>
                   </ul>
                 </div>
