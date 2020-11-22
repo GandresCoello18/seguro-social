@@ -89,7 +89,7 @@ export function NavBar({ title }: Props) {
                             </Badge>
                             &nbsp; &nbsp;
                             <Button color="danger" onClick={cerrarSession}>
-                              Cerrar Session
+                              Cerrar Sesion
                             </Button>
                           </>
                         )}

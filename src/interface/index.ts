@@ -112,6 +112,7 @@ export interface Cita_Grupo_INT {
   tipo_familiar: string;
   nombre_grupo_afiliado: string;
   apellidos: string;
+  cedula_g: number;
   //fecha_nacimiento: string,
   status_grupo: string;
   sexo: string;

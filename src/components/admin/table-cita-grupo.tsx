@@ -8,7 +8,11 @@ import { RootState } from "../../redux";
 import moment from "moment";
 import { UpdateStatusCita } from "./update-status-cita";
 
-export function TableCitasGrupos() {
+interface Props {
+  cedula: string;
+}
+
+export function TableCitasGrupos({ cedula }: Props) {
   const CitasGrupoReducer = useSelector(
     (state: RootState) => state.CitaGrupoReducer
   );
@@ -30,6 +34,7 @@ export function TableCitasGrupos() {
         <thead>
           <tr>
             <th>Estado</th>
+            <th>Cedula</th>
             <th>Integrante</th>
             <th>Tipo</th>
             <th>Medico</th>
@@ -40,39 +45,45 @@ export function TableCitasGrupos() {
           </tr>
         </thead>
         <tbody>
-          {CitasGrupoReducer.citasGrupo.map((cita: Cita_Grupo_INT) => (
-            <tr key={cita.id_cita}>
-              <th className={validate_cita(cita.status_cita)}>
-                {cita.status_cita}
-              </th>
-              <td>
-                {cita.nombre_grupo_afiliado} {cita.apellidos}
-              </td>
-              <td>{cita.tipo_familiar}</td>
-              <th style={{ color: "green" }}>
-                {cita.nombres} {cita.apellido}
-              </th>
-              <td>{moment(cita.fecha_cita).format("LL")}</td>
-              <td>
-                <Badge color="secondary" style={{ fontSize: 17 }}>
-                  {cita.hora_cita}
-                </Badge>
-              </td>
-              <td>
-                <Badge color="secondary" style={{ fontSize: 17 }}>
-                  {cita.jornada}
-                </Badge>
-              </td>
-              <td>
-                <UpdateStatusCita
-                  estado={cita.status_cita}
-                  id_cita={cita.id_cita}
-                />
-                &nbsp; &nbsp;
-                <EliminarCitaBtn id_cita={cita.id_cita} />
-              </td>
-            </tr>
-          ))}
+          {CitasGrupoReducer.citasGrupo
+            .filter(
+              (item: Cita_Grupo_INT) =>
+                item.cedula_g.toString().indexOf(cedula) !== -1
+            )
+            .map((cita: Cita_Grupo_INT) => (
+              <tr key={cita.id_cita}>
+                <th className={validate_cita(cita.status_cita)}>
+                  {cita.status_cita}
+                </th>
+                <td>{cita.cedula_g}</td>
+                <td>
+                  {cita.nombre_grupo_afiliado} {cita.apellidos}
+                </td>
+                <td>{cita.tipo_familiar}</td>
+                <th style={{ color: "green" }}>
+                  {cita.nombres} {cita.apellido}
+                </th>
+                <td>{moment(cita.fecha_cita).format("LL")}</td>
+                <td>
+                  <Badge color="secondary" style={{ fontSize: 17 }}>
+                    {cita.hora_cita}
+                  </Badge>
+                </td>
+                <td>
+                  <Badge color="secondary" style={{ fontSize: 17 }}>
+                    {cita.jornada}
+                  </Badge>
+                </td>
+                <td>
+                  <UpdateStatusCita
+                    estado={cita.status_cita}
+                    id_cita={cita.id_cita}
+                  />
+                  &nbsp; &nbsp;
+                  <EliminarCitaBtn id_cita={cita.id_cita} />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
       {CitasGrupoReducer.loading && <SpinnerLoader />}

@@ -10,7 +10,7 @@ export function ModalInicioSession() {
   return (
     <>
       <button className="boxed-btn3" onClick={() => setVisibleLogin(true)}>
-        Iniciar Session
+        Iniciar Sesion
       </button>
 
       <Modal
@@ -18,7 +18,7 @@ export function ModalInicioSession() {
         toggle={() => setVisibleLogin(!visibleLogin)}
       >
         <ModalHeader toggle={() => setVisibleLogin(!visibleLogin)}>
-          Iniciar Session
+          Iniciar Sesion
         </ModalHeader>
         <ModalBody>
           <LoginForm />

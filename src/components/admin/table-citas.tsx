@@ -8,7 +8,11 @@ import { RootState } from "../../redux";
 import moment from "moment";
 import { UpdateStatusCita } from "./update-status-cita";
 
-export function TableCitas() {
+interface Props {
+  cedula: string;
+}
+
+export function TableCitas({ cedula }: Props) {
   const CitasReducer = useSelector((state: RootState) => state.CitasReducer);
 
   const validate_cita = (estado: string | undefined) => {
@@ -38,37 +42,41 @@ export function TableCitas() {
           </tr>
         </thead>
         <tbody>
-          {CitasReducer.citas.map((cita: Cita_INT) => (
-            <tr key={cita.id_cita}>
-              <th className={validate_cita(cita.status_cita)}>
-                {cita.status_cita}
-              </th>
-              <td>{cita.email}</td>
-              <td>{cita.cedula}</td>
-              <th style={{ color: "green" }}>
-                {cita.nombres} {cita.apellido}
-              </th>
-              <td>{moment(cita.fecha_cita).format("LL")}</td>
-              <td>
-                <Badge color="secondary" style={{ fontSize: 17 }}>
-                  {cita.hora_cita}
-                </Badge>
-              </td>
-              <td>
-                <Badge color="secondary" style={{ fontSize: 17 }}>
-                  {cita.jornada}
-                </Badge>
-              </td>
-              <td>
-                <UpdateStatusCita
-                  estado={cita.status_cita}
-                  id_cita={cita.id_cita}
-                />
-                &nbsp; &nbsp;
-                <EliminarCitaBtn id_cita={cita.id_cita} />
-              </td>
-            </tr>
-          ))}
+          {CitasReducer.citas
+            .filter(
+              (item: Cita_INT) => item.cedula?.toString().indexOf(cedula) !== -1
+            )
+            .map((cita: Cita_INT) => (
+              <tr key={cita.id_cita}>
+                <th className={validate_cita(cita.status_cita)}>
+                  {cita.status_cita}
+                </th>
+                <td>{cita.email}</td>
+                <td>{cita.cedula}</td>
+                <th style={{ color: "green" }}>
+                  {cita.nombres} {cita.apellido}
+                </th>
+                <td>{moment(cita.fecha_cita).format("LL")}</td>
+                <td>
+                  <Badge color="secondary" style={{ fontSize: 17 }}>
+                    {cita.hora_cita}
+                  </Badge>
+                </td>
+                <td>
+                  <Badge color="secondary" style={{ fontSize: 17 }}>
+                    {cita.jornada}
+                  </Badge>
+                </td>
+                <td>
+                  <UpdateStatusCita
+                    estado={cita.status_cita}
+                    id_cita={cita.id_cita}
+                  />
+                  &nbsp; &nbsp;
+                  <EliminarCitaBtn id_cita={cita.id_cita} />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
       {CitasReducer.loading && <SpinnerLoader />}
