@@ -81,7 +81,7 @@ export function NavBarAdmin({ title }: Props) {
                     <div className="Appointment">
                       <div className="d-none d-lg-block">
                         <Button color="danger" block onClick={cerrar_session}>
-                          Cerrar Session
+                          Cerrar Sesion
                         </Button>
                       </div>
                     </div>

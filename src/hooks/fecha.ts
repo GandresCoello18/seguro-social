@@ -3,7 +3,7 @@ import moment from "moment";
 export function fecha_actual() {
   const date = new Date();
   let ano = date.getFullYear();
-  let mes: number | string = date.getMonth();
+  let mes: number | string = date.getMonth() + 1;
   let dia: number | string = date.getDate();
 
   mes = agregar_ceros_mes(mes);
@@ -14,7 +14,7 @@ export function fecha_actual() {
 
 function agregar_ceros_mes(mes: number) {
   if (mes < 10) {
-    return `${mes + 1}`;
+    return `0 + ${mes}`;
   }
   return mes;
 }

@@ -71,8 +71,8 @@ export function FormPayment() {
     let thisMes: any;
     if (MisPagos.length === 0) {
       thisMes = MyUser[0].fecha_registro;
-      date_pago = incrementarMes(thisMes);
-      setFecha_pago(date_pago);
+      //date_pago = incrementarMes(thisMes);
+      setFecha_pago(thisMes);
     } else {
       const ultimo_pago: string = MisPagos.reverse()[MisPagos.length - 1]
         .fecha_pago;
@@ -81,7 +81,7 @@ export function FormPayment() {
       setFecha_pago(date_pago);
     }
     let meses_atrasos = diferencia_de_meses(thisMes);
-    setPagoAtrasado(Math.abs(meses_atrasos));
+    setPagoAtrasado(Math.trunc(Math.abs(meses_atrasos)));
   }, [MisPagos, MyUser]);
 
   const send = async (data: Pago) => {
@@ -133,12 +133,16 @@ export function FormPayment() {
   return (
     <>
       <h2>
+        Registro:{" "}
+        <u>{moment(MyUser.length && MyUser[0].fecha_registro).format("LL")}</u>
+      </h2>
+      <h2>
         Pagar: <u>{moment(new Date(fecha_pago)).format("LL")}</u>
       </h2>
       <h2>
         Pagos atrasados:{" "}
         <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
-          {pagosAtrasado.toString().match(/^-?\d+(?:\.\d{0,0})?/)[0]}
+          {pagosAtrasado}
         </Badge>
       </h2>
 

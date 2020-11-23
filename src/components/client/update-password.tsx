@@ -78,7 +78,7 @@ export function UpdatePassword({ visible, setModal }: Props) {
                 name="password"
                 control={control}
                 rules={{ required: true }}
-                placeholder="Ingresa tu numero de cedula"
+                placeholder="Ingresa tu contraseña actual"
               />
               <FormFeedback invalid={errors.password ? true : false}>
                 {errors.password && "Escribe la clave actual"}
@@ -93,7 +93,7 @@ export function UpdatePassword({ visible, setModal }: Props) {
                 name="newPassword"
                 control={control}
                 rules={{ required: true }}
-                placeholder="Ingresa tu numero de cedula"
+                placeholder="Ingresa tu nueva contaseña"
               />
               <FormFeedback invalid={errors.newPassword ? true : false}>
                 {errors.newPassword && "Escribe la nueva contraseña"}

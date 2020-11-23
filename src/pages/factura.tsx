@@ -50,6 +50,12 @@ export function FacturaPage() {
                 </div>
                 <ul>
                   <li>
+                    Afiliado:{" "}
+                    <strong>
+                      {detalleFact[0].nombres} {detalleFact[0].apellidos}
+                    </strong>
+                  </li>
+                  <li>
                     Cedula: <strong>{detalleFact[0].cedula}</strong>
                   </li>
                   <li>

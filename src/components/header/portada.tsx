@@ -19,7 +19,7 @@ export function Portada() {
                     data-wow-duration="1s"
                     data-wow-delay=".2s"
                   >
-                    436 Afiliados
+                    500 Afiliados
                   </h5>
                   <h3
                     className="wow fadeInLeft"
@@ -69,7 +69,7 @@ export function Portada() {
             <li>
               Ser obrero o trabajar de agricultura y ganaderia actualmente
             </li>
-            <li>No contener RUT</li>
+            <li>No tener RUC</li>
             <li>Datos personales como ( Nombres y apellidos, ect )</li>
             <li>Dirección o lugar de recidencia</li>
             <li>Copia de cedula y papel de votación</li>

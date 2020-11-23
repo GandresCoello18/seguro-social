@@ -56,6 +56,7 @@ export function CreateCita({ isMisCitas }: Props) {
   const [isFeeedback, setIsFeedback] = useState<string>("");
   const [dia, setDia] = useState<string>("");
   const [jornada, setJornada] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [Medico, setMedico] = useState<string>("");
   const [FechasCitas, setFechasCItas] = useState<Array<Date>>([]);
@@ -329,6 +330,18 @@ export function CreateCita({ isMisCitas }: Props) {
                   </FormFeedback>
                 </FormGroup>
 
+                {HorarioMedico.length ? (
+                  <FormGroup>
+                    <Label for="email">Buscar afiliados:</Label>
+                    <Input
+                      placeholder="Escriba # cedula del afiliado"
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </FormGroup>
+                ) : (
+                  ""
+                )}
+
                 {!isGrupo ? (
                   !isMisCitas && (
                     <FormGroup>
@@ -343,11 +356,16 @@ export function CreateCita({ isMisCitas }: Props) {
                           (user) =>
                             user.id_user !== MyUser[0].id_user &&
                             user.nombres !== "anonimo"
-                        ).map((user) => (
-                          <option value={user.id_user}>
-                            {user.cedula} - {user.nombres} {user.apellidos}
-                          </option>
-                        ))}
+                        )
+                          .filter(
+                            (item) =>
+                              item.cedula.toString().indexOf(search) !== -1
+                          )
+                          .map((user) => (
+                            <option value={user.id_user}>
+                              {user.cedula} - {user.nombres} {user.apellidos}
+                            </option>
+                          ))}
                       </select>
                       <FormFeedback invalid={errors.id_user ? true : false}>
                         {errors.id_user && "Seleccione el usuario"}
@@ -367,11 +385,17 @@ export function CreateCita({ isMisCitas }: Props) {
                         (user) =>
                           user.id_user === MyUser[0].id_user &&
                           user.nombres !== "anonimo"
-                      ).map((user) => (
-                        <option value={user.id_grupo}>
-                          {user.tipo_familiar} - {user.nombres} {user.apellidos}
-                        </option>
-                      ))}
+                      )
+                        .filter(
+                          (item) =>
+                            item.cedula_g.toString().indexOf(search) !== -1
+                        )
+                        .map((user) => (
+                          <option value={user.id_grupo}>
+                            {user.cedula_g} {user.tipo_familiar} -{" "}
+                            {user.nombres} {user.apellidos}
+                          </option>
+                        ))}
                     </select>
                     <FormFeedback invalid={errors.id_user ? true : false}>
                       {errors.id_user && "Seleccione el integrante"}
@@ -390,11 +414,17 @@ export function CreateCita({ isMisCitas }: Props) {
                         (user) =>
                           user.id_user !== MyUser[0].id_user &&
                           user.nombres !== "anonimo"
-                      ).map((user) => (
-                        <option value={user.id_grupo}>
-                          {user.tipo_familiar} - {user.nombres} {user.apellidos}
-                        </option>
-                      ))}
+                      )
+                        .filter(
+                          (item) =>
+                            item.cedula_g.toString().indexOf(search) !== -1
+                        )
+                        .map((user) => (
+                          <option value={user.id_grupo}>
+                            {user.cedula_g} {user.tipo_familiar} -{" "}
+                            {user.nombres} {user.apellidos}
+                          </option>
+                        ))}
                     </select>
                     <FormFeedback invalid={errors.id_user ? true : false}>
                       {errors.id_user && "Seleccione el integrante"}
