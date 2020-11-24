@@ -11,7 +11,7 @@ export function MedicosPage() {
           <div className="row">
             <div className="col-xl-12">
               <div className="bradcam_text">
-                <h3>Medicos y mas pesonal</h3>
+                <h3>Medicos y mas personal</h3>
               </div>
             </div>
           </div>
