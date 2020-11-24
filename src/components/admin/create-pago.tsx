@@ -96,8 +96,8 @@ export function CreatePagoModal() {
     let thisMes: any;
     if (userPago.length === 0) {
       thisMes = user.fecha_registro;
-      date_pago = incrementarMes(thisMes);
-      setFecha_pago(date_pago);
+      //date_pago = incrementarMes(thisMes);
+      setFecha_pago(thisMes);
     } else {
       const ultimo_pago: string = userPago.reverse()[userPago.length - 1]
         .fecha_pago;
