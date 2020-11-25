@@ -108,7 +108,7 @@ export function FormPayment() {
 
     try {
       const resPayment: ResponseAxios = await CreatePago(
-        moment(new Date(fecha_pago)).format(),
+        moment(fecha_pago).format(),
         data.metodo,
         monto
       );
@@ -120,7 +120,7 @@ export function FormPayment() {
         setIsFedback("success");
         setFeedback(
           `Su pago de seguro fue registrada, pago para la fecha: ${moment(
-            new Date(fecha_pago)
+            fecha_pago
           ).format("LL")}, ver en la seccion de ( mis pagos )`
         );
       }
@@ -137,7 +137,7 @@ export function FormPayment() {
         <u>{moment(MyUser.length && MyUser[0].fecha_registro).format("LL")}</u>
       </h2>
       <h2>
-        Pagar: <u>{moment(new Date(fecha_pago)).format("LL")}</u>
+        Pagar: <u>{moment(fecha_pago).format("LL")}</u>
       </h2>
       <h2>
         Pagos atrasados:{" "}

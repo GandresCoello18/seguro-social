@@ -62,7 +62,7 @@ export function CreatePagoModal() {
     setIsLoading(true);
 
     const resPayment: ResponseAxios = await CreatePago(
-      moment(new Date(fecha_pago)).format(),
+      moment(fecha_pago).format(),
       data.metodo,
       data.monto,
       data.id_user,
@@ -108,7 +108,9 @@ export function CreatePagoModal() {
     let meses_atrasos = diferencia_de_meses(thisMes);
     setPagoAtrasado(Math.trunc(Math.abs(meses_atrasos)));
 
-    setMontoEsperado(5 * Math.trunc(Math.abs(meses_atrasos)));
+    const monto_esperado_a_pagar: number =
+      5 * Math.trunc(Math.abs(meses_atrasos));
+    setMontoEsperado(monto_esperado_a_pagar ? monto_esperado_a_pagar : 5);
   };
 
   const validarMonto = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,7 +181,7 @@ export function CreatePagoModal() {
                   <p style={{ fontSize: 20 }}>
                     Siguiente Pago:{" "}
                     <Badge color="warning">
-                      {moment(new Date(fecha_pago)).format("LL")}
+                      {moment(fecha_pago).format("LL")}
                     </Badge>
                   </p>
                   <p style={{ fontSize: 20 }}>
