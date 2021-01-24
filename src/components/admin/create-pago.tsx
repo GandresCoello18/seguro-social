@@ -105,6 +105,7 @@ export function CreatePagoModal() {
       date_pago = incrementarMes(ultimo_pago);
       setFecha_pago(date_pago);
     }
+
     let meses_atrasos = diferencia_de_meses(thisMes);
     setPagoAtrasado(Math.trunc(Math.abs(meses_atrasos)));
 
