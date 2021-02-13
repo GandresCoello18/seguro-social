@@ -63,7 +63,7 @@ export function CardPagos({ pagos, limit }: Props) {
               target="_blank"
               className="btn btn-info form-control"
             >
-              Detalles
+              Factura
             </Link>
             {Cookies.get("isAdmin") === "true" && (
               <Button

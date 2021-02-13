@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { DetallesPayment } from "./detalles-de-compra";
-import { Pago_INT, ResponseAxios, Usuario_INT } from "../../interface";
+import { ResponseAxios, Usuario_INT } from "../../interface";
 import { CreatePago } from "../../api/fetch/pagos";
 import {
   Form,
@@ -14,9 +13,8 @@ import {
   Alert,
   Badge,
 } from "reactstrap";
-import { RootState } from "../../redux";
-import { diferencia_de_meses, incrementarMes } from "../../hooks/fecha";
 import moment from "moment";
+import { PayPalButton, OnCaptureData } from "react-paypal-button";
 
 interface Pago {
   metodo?: string;
@@ -25,6 +23,12 @@ interface Pago {
   mesCard?: number;
   yearCard?: number;
   cvcNumber: number;
+}
+
+interface Props {
+  fecha_pago: any;
+  pagosAtrasado: number;
+  MyUser: Usuario_INT[];
 }
 
 const meses = [
@@ -42,47 +46,15 @@ const meses = [
   { id: 11, mes: "Diciembre" },
 ];
 
-export function FormPayment() {
-  const MisPagos: Array<Pago_INT> = useSelector(
-    (state: RootState) => state.PagosReducer.MisPagos
-  );
-  const MyUser: Array<Usuario_INT> = useSelector(
-    (state: RootState) => state.UsuarioReducer.myUser
-  );
-
+export function FormPayment({ fecha_pago, pagosAtrasado, MyUser }: Props) {
   const { control, errors, handleSubmit } = useForm<Pago>();
   const [mes, setMes] = useState<number>(0);
   const [ano, setAno] = useState<number>(0);
   const [isProximoPago, setIsProximoPago] = useState<boolean>(false);
-  const [MetodoPago, setMetodoPago] = useState<string | any>("Tarjeta");
+  const [MetodoPago, setMetodoPago] = useState<string | any>("Paypal");
   const [isFedback, setIsFedback] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
-  const [credito, setCredito] = useState<Pago>();
-  const [fecha_pago, setFecha_pago] = useState<Date | number>(0);
-  const [pagosAtrasado, setPagoAtrasado] = useState<number | any>(0);
-
-  useEffect(() => {
-    if (localStorage.getItem("credito")) {
-      const jsonCredito: string | null | any = localStorage.getItem("credito");
-      setCredito(JSON.parse(jsonCredito));
-    }
-
-    let date_pago;
-    let thisMes: any;
-    if (MisPagos.length === 0) {
-      thisMes = MyUser[0].fecha_registro;
-      //date_pago = incrementarMes(thisMes);
-      setFecha_pago(thisMes);
-    } else {
-      const ultimo_pago: string = MisPagos.reverse()[MisPagos.length - 1]
-        .fecha_pago;
-      thisMes = ultimo_pago;
-      date_pago = incrementarMes(ultimo_pago);
-      setFecha_pago(date_pago);
-    }
-    let meses_atrasos = diferencia_de_meses(thisMes);
-    setPagoAtrasado(Math.trunc(Math.abs(meses_atrasos)));
-  }, [MisPagos, MyUser]);
+  const [credito] = useState<Pago>();
 
   const send = async (data: Pago) => {
     setIsFedback("");
@@ -106,11 +78,17 @@ export function FormPayment() {
 
     const monto = 5;
 
+    await generatePago(data.metodo, monto);
+  };
+
+  const generatePago = async (metodo: string, monto: number) => {
     try {
       const resPayment: ResponseAxios = await CreatePago(
-        moment(fecha_pago).format(),
-        data.metodo,
-        monto
+        moment(fecha_pago || localStorage.getItem("fecha-pago")).format(),
+        metodo,
+        monto,
+        MyUser[0].id_user,
+        true
       );
 
       if (resPayment.respuesta.type === "ERROR") {
@@ -120,7 +98,7 @@ export function FormPayment() {
         setIsFedback("success");
         setFeedback(
           `Su pago de seguro fue registrada, pago para la fecha: ${moment(
-            fecha_pago
+            fecha_pago || localStorage.getItem("fecha-pago")
           ).format("LL")}, ver en la seccion de ( mis pagos )`
         );
       }
@@ -128,6 +106,13 @@ export function FormPayment() {
       setIsFedback("danger");
       setFeedback(error.message);
     }
+  };
+
+  const PaymentPaypal = async (response: OnCaptureData) => {
+    const purchase_unit = response.purchase_units[0] as any;
+    const capture = purchase_unit.payments.captures[0];
+    const paymentId = capture.id;
+    await generatePago("Paypal", 5);
   };
 
   return (
@@ -327,31 +312,37 @@ export function FormPayment() {
 
           <DetallesPayment
             title="Detalles del pedido"
-            content={`Pago de seguro social por el mes  de ${"Enero"} del ${2020}`}
+            content={`Pago de seguro social por el mes  de ${moment(
+              fecha_pago
+            ).format("LL")}`}
             monto={5}
           />
         </>
       ) : (
-        <form
-          action="https://www.paypal.com/cgi-bin/webscr"
-          method="post"
-          target="_top"
-        >
-          <input type="hidden" name="cmd" value="_s-xclick" />
-          <input type="hidden" name="hosted_button_id" value="8WL36TRP2ZZ74" />
-          <input
-            type="image"
-            src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif"
-            name="submit"
-            alt="PayPal - The safer, easier way to pay online!"
+        <>
+          <PayPalButton
+            paypalOptions={{
+              clientId:
+                "ATlJBRTGGr5d9A4Q_FLgdCQlvJQIkzQc73hp4Nye9ESEdlpGwLQj-RWvjDEzyki31QUj40J84F2khBbl",
+              intent: "capture",
+              currency: "USD",
+            }}
+            buttonStyles={{
+              layout: "vertical",
+              shape: "rect",
+            }}
+            amount={5}
+            onPaymentStart={() => console.log("payment")}
+            onPaymentSuccess={async (response: OnCaptureData) =>
+              await PaymentPaypal(response)
+            }
+            onPaymentError={(error: any) => console.log(error)}
+            onPaymentCancel={(data: any) => console.log(data)}
           />
-          <img
-            alt=""
-            src="https://www.paypalobjects.com/es_XC/i/scr/pixel.gif"
-            width="1"
-            height="1"
-          />
-        </form>
+          <br />
+
+          {isFedback && <Alert color={isFedback}>{feedback}</Alert>}
+        </>
       )}
     </>
   );

@@ -25,6 +25,7 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.8.6",
     "react-icons": "^3.11.0",
+    "react-paypal-button": "^4.1.1",
     "react-popper": "^2.2.3",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",

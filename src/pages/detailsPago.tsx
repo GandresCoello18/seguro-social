@@ -3,7 +3,7 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, RootState } from "../redux";
 import { Pago_INT, ResponseAxios } from "../interface";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { NavBarAdmin } from "../components/admin/navbar";
 import { Badge, Button, Table } from "reactstrap";
@@ -131,13 +131,18 @@ export function DetailsPagoPage() {
                     </td>
                     <td>${pago.monto}</td>
                     <td>
+                      <Link to={`factura/${pago.id_pago}`} target="_blank">
+                        <Button color="primary" className="mt-1 ml-2">
+                          Factura
+                        </Button>
+                      </Link>
+                      &nbsp; &nbsp;
                       <Button
                         color="danger"
                         onClick={() => delete_pago(pago.id_pago)}
-                        className="mt-3"
-                        block
+                        className="mt-1"
                       >
-                        ELiminar
+                        Borrar
                       </Button>
                     </td>
                   </tr>
