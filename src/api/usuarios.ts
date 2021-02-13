@@ -38,6 +38,20 @@ export const update_password_user = async (
   });
 };
 
+export const update_password_admin_user = async (
+  idUser: string,
+  password: string
+) => {
+  return await axios({
+    method: "PUT",
+    url: `${DOMAIN}/api/usuario/cambiar_clave/admin`,
+    data: {
+      password,
+      idUser,
+    },
+  });
+};
+
 //// PETICIONES DELETE
 
 export const eliminar_usuarios = async (id: string) => {

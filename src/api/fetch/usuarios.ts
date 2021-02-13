@@ -3,6 +3,7 @@ import { Respuesta, Usuario_INT } from "../../interface";
 import {
   create_count,
   eliminar_usuarios,
+  update_password_admin_user,
   update_password_user,
 } from "../usuarios";
 
@@ -62,6 +63,34 @@ export const UpdateClaveUser = async (
       } else {
         respuesta = {
           feeback: `Ocurrio un error al cambiar la clave`,
+          type: "ERROR",
+        };
+      }
+    }
+
+    return { axios, respuesta };
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const UpdatePasswordAdmin = async (
+  idUser: string,
+  passwword: string
+) => {
+  try {
+    const axios: AxiosResponse = await update_password_admin_user(
+      idUser,
+      passwword
+    );
+    if (axios.data.feeback) {
+      respuesta = { feeback: axios.data.feeback, type: "ERROR" };
+    } else {
+      if (axios.data.update) {
+        respuesta = { feeback: `LA CLAVE FUE ACTUALIZADA`, type: "EXITO" };
+      } else {
+        respuesta = {
+          feeback: `OCURRIO UN ERROR AL ACTUALIZAR LA CLAVE`,
           type: "ERROR",
         };
       }

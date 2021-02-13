@@ -41,7 +41,7 @@ export function getMondays(date: Date, day: number) {
     d.setDate(d.getDate() + 7);
   }
 
-  return fecha;
+  return fecha.filter((item) => item > new Date());
 }
 
 export function incrementarMes(ultimo_pago: any) {
@@ -57,14 +57,6 @@ export function diferencia_de_años(data: any): number {
 }
 
 export function diferencia_de_meses(data: any): number {
-  console.log(
-    moment(new Date(data)).diff(
-      moment(new Date(fecha_actual())),
-      "months",
-      true
-    )
-  );
-
   return moment(new Date(data)).diff(
     moment(new Date(fecha_actual())),
     "months",

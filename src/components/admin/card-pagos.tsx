@@ -39,10 +39,12 @@ export function CardPagos({ pagos, limit }: Props) {
         <div className="col-lg-4 col-xl-3 col-md-6" key={pago.id_pago}>
           <div className="single_catagory">
             {Cookies.get("isAdmin") === "true" && (
-              <div className="text-center">
-                <strong>Afiliado: </strong>
-                <Badge color="secondary">{pago.email}</Badge>
-              </div>
+              <Link to={`/Details-Pagos/${pago.id_user}`} target="_blank">
+                <div className="text-center">
+                  <strong>Afiliado: </strong>
+                  <Badge color="secondary">{pago.email}</Badge>
+                </div>
+              </Link>
             )}
             <br />
             <a href="jobs.html">

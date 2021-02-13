@@ -4,6 +4,8 @@ export function ValidateStatusUser(status: string | any): string {
       return "secondary";
     case "activo":
       return "success";
+    case "pagado":
+      return "success";
     case "atrasado":
       return "danger";
     default:

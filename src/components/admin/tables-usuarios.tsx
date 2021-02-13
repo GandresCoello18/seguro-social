@@ -10,6 +10,7 @@ import { AgregarIntegranteAfiliado } from "./agregar-integrante-afiliado";
 import { VerIntegrantes } from "./ver-integrantes";
 import { ValidateStatusUser } from "../../hooks/color-row-user";
 import { validateStatus } from "../../hooks/validate-status";
+import { UpdatePassword } from "./update-password";
 
 interface Props {
   limit: number;
@@ -119,6 +120,8 @@ export function TablesUsuarios({ limit }: Props) {
                             nombres={user.nombres}
                             apellido={user.apellidos}
                           />
+                          &nbsp; &nbsp;
+                          <UpdatePassword id_user={user.id_user} />
                           &nbsp; &nbsp;
                           <EliminarUserBtn id_user={user.id_user} />
                         </td>

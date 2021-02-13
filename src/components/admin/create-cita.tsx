@@ -225,7 +225,7 @@ export function CreateCita({ isMisCitas }: Props) {
                   <Label for="password">Seleccionar mes:</Label>
                   <input
                     type="month"
-                    min="2020-10"
+                    min="2021-02"
                     className="form-control"
                     onChange={updateMes}
                     defaultValue={fecha_actual()}

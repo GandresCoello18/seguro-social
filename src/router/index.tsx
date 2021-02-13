@@ -21,6 +21,7 @@ import { HorarioPage } from "../pages/horarioAdmin";
 import { CitasAdminPage } from "../pages/citasAdmin";
 import { ContactoAdminPage } from "../pages/contactoAdmin";
 import { DetalleMedicoPage } from "../pages/detalle-medicos";
+import { DetailsPagoPage } from "../pages/detailsPago";
 
 export default function Routes() {
   return (
@@ -33,6 +34,10 @@ export default function Routes() {
             component={DetalleMedicoPage}
           />
           <PrivateRoute path="/Pagos" component={PagosAdmin} />
+          <PrivateRoute
+            path="/Details-Pagos/:idUser"
+            component={DetailsPagoPage}
+          />
           <PrivateRoute path="/administracion" component={HomeAdmin} />
           <PrivateRoute path="/horario" component={HorarioPage} />
           <PrivateRoute path="/citas" component={CitasAdminPage} />
