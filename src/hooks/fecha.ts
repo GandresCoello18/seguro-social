@@ -14,7 +14,7 @@ export function fecha_actual() {
 
 function agregar_ceros_mes(mes: number) {
   if (mes < 10) {
-    return `${0}${mes + 1}`;
+    return `${0}${mes}`;
   }
   return mes;
 }
@@ -57,6 +57,7 @@ export function diferencia_de_años(data: any): number {
 }
 
 export function diferencia_de_meses(data: any): number {
+  console.log(fecha_actual());
   return moment(new Date(data)).diff(
     moment(new Date(fecha_actual())),
     "months",

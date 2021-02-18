@@ -23,6 +23,7 @@ export function DetailsPagoPage() {
   const params: Params = useParams();
   const history = useHistory<typeof useHistory>();
   const [detallePago, setDetallePago] = useState<Pago_INT[]>([]);
+  const [mesesAtrasados, setMesesAtrasados] = useState<number[]>([]);
 
   const PagosReducer = useSelector(
     (state: RootState) => state.PagosReducer.pagos
@@ -45,7 +46,18 @@ export function DetailsPagoPage() {
         setFecha_pago(date_pago);
 
         let meses_atrasos = diferencia_de_meses(ultimo_pago);
-        setPagoAtrasado(Math.trunc(Math.abs(meses_atrasos)));
+        const cal_mes_atrasos = Math.trunc(Math.abs(meses_atrasos));
+        setPagoAtrasado(cal_mes_atrasos);
+
+        if (cal_mes_atrasos) {
+          const atrasos: any = [];
+          let date;
+          for (let i = 0; i < cal_mes_atrasos; i++) {
+            date = incrementarMes(date || ultimo_pago);
+            atrasos.push(date);
+          }
+          setMesesAtrasados(atrasos);
+        }
       }
     }
   }, [params, PagosReducer, history]);
@@ -94,11 +106,20 @@ export function DetailsPagoPage() {
             <p style={{ fontSize: 20 }}>
               Pagos Atrasados:{" "}
               <Badge color={pagosAtrasado > 0 ? "danger" : "success"}>
-                {pagosAtrasado}
+                # {pagosAtrasado}
               </Badge>
             </p>
+            {mesesAtrasados.length ? (
+              <ul>
+                {mesesAtrasados.map((item) => (
+                  <li key={item}>{moment(item).format("LL")}</li>
+                ))}
+              </ul>
+            ) : (
+              ""
+            )}
             <p style={{ fontSize: 20 }}>
-              Monto a pagar: <Badge>{pagosAtrasado * 5}</Badge>
+              Monto a pagar: <Badge>$ {pagosAtrasado * 5}</Badge>
             </p>
           </div>
           <div className="col-12 col-md-10">
@@ -131,7 +152,7 @@ export function DetailsPagoPage() {
                     </td>
                     <td>${pago.monto}</td>
                     <td>
-                      <Link to={`factura/${pago.id_pago}`} target="_blank">
+                      <Link to={`/factura/${pago.id_pago}`} target="_blank">
                         <Button color="primary" className="mt-1 ml-2">
                           Factura
                         </Button>
