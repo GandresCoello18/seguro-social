@@ -192,20 +192,22 @@ export function CreateCita({ isMisCitas }: Props) {
 
   const selectFecha = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setIsLoading(true);
-    try {
-      const resHorasDisponibles = await ValidarCitas(
-        isHorario,
-        moment(e.target.value).format().substr(0, 10)
-      );
-      setHorasCitas(resHorasDisponibles.data);
-      if (resHorasDisponibles.data.length === 0) {
+    if (e.target.value !== "none") {
+      try {
+        const resHorasDisponibles = await ValidarCitas(
+          isHorario,
+          moment(e.target.value).format().substr(0, 10)
+        );
+        setHorasCitas(resHorasDisponibles.data);
+        if (resHorasDisponibles.data.length === 0) {
+          setIsFeedback("danger");
+          setFeedback("NO HAY HORAS DISPONIBLES PARA ESTA FECHA");
+        }
+        setIsLoading(false);
+      } catch (error) {
         setIsFeedback("danger");
-        setFeedback("NO HAY HORAS DISPONIBLES PARA ESTA FECHA");
+        setFeedback(error.message);
       }
-      setIsLoading(false);
-    } catch (error) {
-      setIsFeedback("danger");
-      setFeedback(error.message);
     }
     setIsLoading(false);
   };
@@ -443,6 +445,7 @@ export function CreateCita({ isMisCitas }: Props) {
                     name="fecha_cita"
                     ref={register({ required: true })}
                   >
+                    <option value="none">Seleccionar fecha</option>
                     {FechasCitas?.map((fecha) => (
                       <option value={fecha.toString()}>
                         {moment(fecha).format("LL")}
