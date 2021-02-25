@@ -174,14 +174,6 @@ export function PagosAdmin() {
                               Factura
                             </Button>
                           </Link>
-                          &nbsp; &nbsp;
-                          <Button
-                            color="danger"
-                            onClick={() => false}
-                            className="mt-1"
-                          >
-                            Borrar
-                          </Button>
                         </td>
                       </tr>
                     ))}
