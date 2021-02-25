@@ -18,6 +18,13 @@ export const obtenerPagos = async () => {
   });
 };
 
+export const obtenerPagosPorFecha = async (fecha: string) => {
+  return await axios({
+    method: "GET",
+    url: `${DOMAIN}/api/pagos/mes/${fecha}`,
+  });
+};
+
 ///// PETICIONES POST
 
 export const createPagos = async (

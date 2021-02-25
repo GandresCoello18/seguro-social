@@ -35,7 +35,7 @@ export function CardPagos({ pagos, limit }: Props) {
 
   return (
     <>
-      {pagos.slice(0, limit).map((pago) => (
+      {pagos.map((pago) => (
         <div className="col-lg-4 col-xl-3 col-md-6" key={pago.id_pago}>
           <div className="single_catagory">
             {Cookies.get("isAdmin") === "true" && (
@@ -72,7 +72,7 @@ export function CardPagos({ pagos, limit }: Props) {
                 className="mt-3"
                 block
               >
-                ELiminar
+                Eliminar
               </Button>
             )}
           </div>
